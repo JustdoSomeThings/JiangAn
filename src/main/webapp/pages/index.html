@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>江岸日用化工管理</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">江岸日用化工管理</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">工作台</a></li>
+            <li class="layui-nav-item"><a href="">模型管理</a></li>
+            <li class="layui-nav-item"><a href="">模块设计</a></li>
+            <li class="layui-nav-item"><a href="">常用工具</a></li>
+            <li class="layui-nav-item"><a href="">文件管理</a></li>
+            <li class="layui-nav-item"><a href="">系统设置</a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">部门管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:load_part();">部门管理</a></dd>
+                        <dd><a href="javascript:;">恢复部门</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">员工管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:load_employee();">员工管理</a></dd>
+                        <dd><a href="javascript:;">恢复员工</a></dd>
+                        <dd><a href="javascript:;">查询员工</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">产品管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:load_sort();">类别管理</a></dd>
+                        <dd><a href="javascript:;">产品管理</a></dd>
+                        <dd><a href="javascript:;">产品查询</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">库存管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:load_inproduct();">出入库管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">客户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">客户管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">订单管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:load_order();">订单管理</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">业绩报表</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">部门业绩统计</a></dd>
+                        <dd><a href="javascript:;">产品业绩销售统计</a></dd>
+                        <dd><a href="javascript:;">员工个人业绩</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div id="main" style="padding: 15px;">内容主体区域</div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="../layui/layui.js"></script>
+
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+</script>
+<script>
+    //部门
+    function load_part() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="part/list.html" width="100%" height="600px"></object>';
+    }
+
+    //员工
+    function load_employee() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="employee/list.html" width="100%" height="600px"></object>';
+    }
+
+    //类别
+    function load_sort() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="sort/list.html" width="100%" height="600px"></object>';
+    }
+
+    //库存
+    function load_inproduct() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="inproduct/list.html" width="100%" height="600px"></object>';
+    }
+
+    //订单
+    function load_order() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="order/list.html" width="100%" height="600px"></object>';
+    }
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css"  media="all">
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="partForm">
+    <div class="layui-form-item" style="margin:0 auto;margin-top:10px">
+        <div class="layui-inline">
+            <label class="layui-form-label">部门名称</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" id="name" name="name" lay-verify="name" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">部门备注</label>
+            <div class="layui-input-inline" style="width:200px">
+                <input type="text" id="remark" name="remark" lay-verify="remark" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+</form>
+<script src="../../layui/layui.js" charset="utf-8"></script>
+<script>
+ //   getValue属于window对象
+function getValue() {
+    var name = document.getElementById("name").value;
+    var remark = document.getElementById("remark").value;
+
+    var data = {"name": name, "remark":remark};
+    return data;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.PartDao">
+    <resultMap id="partResultMap" type="com.houpu.model.Part">
+        <id property="id" column="p_id"></id>
+        <result property="name" column="p_name"></result>
+        <result property="remark" column="p_remark"></result>
+        <result property="is" column="p_is"></result>
+    </resultMap>
+
+    <!-- 查询所有存在部门名称 -->
+    <select id="queryName" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select p_name from t_part where p_is = 1
+    </select>
+
+    <!-- 查询状态为存在的部门 -->
+    <select id="queryLike" parameterType="part" resultMap="partResultMap">
+        select * from t_part where p_is = 1
+        <if test="name != null">
+            AND p_name like concat('%', #{name}, '%')
+        </if>
+        <if test="remark != null">
+            AND p_remark like concat('%', #{remark}, '%')
+        </if>
+    </select>
+
+    <!-- 假删除：修改部门状态 -->
+    <update id="updateState" parameterType="java.lang.Integer">
+        update t_part set p_is = 0 where p_id = #{id}
+    </update>
+
+    <!-- 更新部门 -->
+    <update id="update" parameterType="part">
+        update t_part set p_name = #{name}, p_remark = #{remark} where p_id = #{id}
+    </update>
+
+    <!-- 新增部门 -->
+    <insert id="savePart" parameterType="part">
+        insert into t_part (p_name, p_remark, p_is) values (#{name}, #{remark}, 1);
+    </insert>
+</mapper>

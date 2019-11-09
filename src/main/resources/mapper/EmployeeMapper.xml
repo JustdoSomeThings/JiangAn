@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.EmployeeDao">
+    <resultMap id="EmployeeResultMap" type="com.houpu.model.Employee">
+        <id property="id" column="e_id"/>
+        <result property="partId" column="p_id"/>
+        <result property="loginName" column="e_loginname"/>
+        <result property="password" column="e_psw"/>
+        <result property="img" column="e_img"/>
+        <result property="gender" column="e_sex"/>
+        <result property="flag" column="e_flag"/>
+        <result property="admin" column="e_admin"/>
+        <result property="remark" column="e_remark"/>
+        <result property="trueName" column="e_truename"/>
+        <result property="is" column="e_is"/>
+    </resultMap>
+
+    <!-- 查询所有员工 -->
+    <select id="queryAllEmployee" resultMap="EmployeeResultMap">
+        select * from t_emp
+    </select>
+
+    <!-- 查询所有员工的真实姓名 -->
+    <select id="queryTrueName" parameterType="part" resultType="java.lang.String">
+        SELECT
+            e_truename
+        FROM
+            t_emp
+        WHERE
+            e_is = 1
+            AND p_id = (
+            SELECT
+                p_id
+            FROM
+                t_part
+        WHERE
+            p_name = #{name})
+    </select>
+</mapper>

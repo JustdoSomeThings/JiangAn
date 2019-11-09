@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.ClientDao">
+    <resultMap id="clientResultMap" type="com.houpu.model.Client">
+        <id property="id" column="c_id"></id>
+        <result property="employeeId" column="e_id"></result>
+        <result property="name" column="c_name"></result>
+        <result property="tel" column="c_tel"></result>
+        <result property="address" column="c_address"></result>
+        <result property="is" column="c_is"></result>
+    </resultMap>
+
+    <!-- 根据员工姓名查询客户姓名 -->
+    <select id="queryName" parameterType="employee" resultType="java.lang.String">
+        SELECT
+            c_name
+        FROM
+            t_client
+        WHERE
+            c_id = (
+            SELECT
+                c_id
+            FROM
+                t_emp
+        WHERE
+            e_truename = #{trueName})
+    </select>
+</mapper>

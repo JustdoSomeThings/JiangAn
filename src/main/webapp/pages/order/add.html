@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../layui/css/layui.css"  media="all">
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="orderForm">
+    <div class="layui-form-item" style="margin-top:10px">
+        <label class="layui-form-label">部门名称：</label>
+        <div class="layui-input-block">
+            <select class="layui-form-select" id="partName" lay-filter="partFilter">
+            </select>
+        </div>
+        <label class="layui-form-label">员工姓名：</label>
+        <div class="layui-input-block">
+            <select class="layui-form-select" id="employeeTrueName" lay-filter="employeeFilter">
+            </select>
+        </div>
+        <label class="layui-form-label">客户姓名：</label>
+        <div class="layui-input-block">
+            <select class="layui-form-select" id="clientName" lay-filter="clientFilter">
+            </select>
+        </div>
+    </div>
+</form>
+<style type="text/css">
+    .layui-form-select {
+        width: 150px;
+    }
+</style>
+<script src="../../layui/layui.js" charset="utf-8"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function getValue() {
+        var partName = document.getElementById("partName").value;
+        var employeeTrueName = document.getElementById("employeeTrueName").value;
+        var clientName = document.getElementById("clientName").value;
+        var data = {"partName": partName, "employeeTrueName":employeeTrueName, "clientName": clientName};
+        return data;
+    }
+</script>
+</body>
+</html>

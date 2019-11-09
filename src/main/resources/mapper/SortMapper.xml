@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.SortDao">
+    <resultMap id="sort" type="com.houpu.model.Sort">
+        <id property="id" column="s_id"/>
+        <result property="name" column="s_name"/>
+        <result property="remark" column="s_remark"/>
+        <result property="is" column="s_is"/>
+    </resultMap>
+
+    <!-- 查询类别 -->
+    <select id="queryAllSort" resultMap="sort">
+            select * from t_sort
+    </select>
+
+    <!-- 新增类别 -->
+    <insert id="inserSort" parameterType="com.houpu.model.Sort">
+        insert into t_sort(s_name, s_remark, s_is)
+        values(#{name}, #{remark}, '0')
+    </insert>
+
+    <!-- 查询所有存在产品的类别名称 -->
+    <select id="queryAllSortC" parameterType="java.lang.String" resultType="java.lang.String">
+        select s_name from t_sort where s_is = 1
+    </select>
+
+    <!-- 查询所有产品类别的真实地址 -->
+    <select id="queryTrueUserName" parameterType="sort" resultType="java.lang.String">
+        SELECT
+            s_name
+        FROM
+            t_sort
+        WHERE
+            s_is = 1
+            AND s_id = (
+            SELECT
+                s_id
+            FROM
+                t_product
+        WHERE
+            p_area = #{area})
+    </select>
+
+
+</mapper>

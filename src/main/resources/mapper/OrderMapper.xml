@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.OrderDao">
+    <resultMap id="orderResultMap" type="com.houpu.model.Order">
+        <id property="id" column="r_id"></id>
+        <result property="employeeId" column="e_id"></result>
+        <result property="clientId" column="c_id"></result>
+        <result property="time" column="r_time"></result>
+        <result property="is" column="r_is"></result>
+
+        <!-- 关联employee表 -->
+        <association property="employee" javaType="com.houpu.model.Employee">
+            <id property="id" column="e_id"></id>
+            <result property="trueName" column="e_truename"></result>
+        </association>
+
+        <!-- 关联client表 -->
+        <association property="client" javaType="com.houpu.model.Client">
+            <id property="id" column="c_id"></id>
+            <result property="name" column="c_name"></result>
+        </association>
+    </resultMap>
+
+    <!-- 查询所有订单 -->
+    <select id="queryAll" resultMap="orderResultMap">
+        SELECT
+            t_orders.*,
+            t_client.c_name,
+            t_emp.e_truename
+        FROM
+            t_orders,
+            t_emp,
+            t_client
+        WHERE
+            t_orders.e_id = t_emp.e_id
+            AND t_orders.c_id = t_client.c_id
+    </select>
+
+</mapper>
