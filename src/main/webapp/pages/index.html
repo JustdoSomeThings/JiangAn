@@ -82,7 +82,7 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">业绩报表</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">部门业绩统计</a></dd>
+                        <dd><a href="javascript:load_achievement_part();">部门业绩统计</a></dd>
                         <dd><a href="javascript:;">产品业绩销售统计</a></dd>
                         <dd><a href="javascript:;">员工个人业绩</a></dd>
                     </dl>
@@ -145,6 +145,12 @@
     function load_order() {
         document.getElementById("main").innerHTML =
             '<object type="text/html" data="order/list.html" width="100%" height="600px"></object>';
+    }
+
+    //部门业绩统计图
+    function load_achievement_part() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="achievement/part.html" width="100%" height="600px"></object>';
     }
 </script>
 

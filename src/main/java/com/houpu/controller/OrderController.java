@@ -33,4 +33,19 @@ public class OrderController {
         return result;
     }
 
+    @RequestMapping(value = "/queryAchievement", method = RequestMethod.POST)
+    public List<Map<String, Object>> queryAchievement() {
+        List<Map<String, Object>> result = orderService.queryAchievement();
+        for (Map<String, Object> stringObjectMap : result) {
+            String key = null;
+            Object value = null;
+            for (Map.Entry<String, Object> field : stringObjectMap.entrySet()) {
+                key = field.getKey();
+                value = field.getValue();
+                System.out.println(key + " : " + value);
+            }
+        }
+        return result;
+    }
+
 }
