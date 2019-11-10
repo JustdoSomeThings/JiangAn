@@ -38,4 +38,23 @@
             AND t_orders.c_id = t_client.c_id
     </select>
 
+
+    <!-- 查询各部门的(业绩)订单数量 -->
+    <select id="queryAchievement" resultType="java.util.Map">
+        SELECT
+            p_name as name,
+            count(p_name) as value
+        FROM
+            (
+            SELECT
+                t1.p_name
+            FROM
+                ( SELECT t_emp.e_id, p_name FROM t_part, t_emp WHERE t_emp.p_id = t_part.p_id ) AS t1,
+                t_orders AS t2
+            WHERE
+                t1.e_id = t2.e_id
+            ) AS t3
+        GROUP BY
+            p_name
+    </select>
 </mapper>

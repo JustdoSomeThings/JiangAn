@@ -67,4 +67,5 @@
 
     <mvc:resources mapping="/pages/**" location="/pages/ "/>
     <mvc:resources mapping="/layui/**" location="/layui/ "/>
+    <mvc:resources mapping="/js/**" location="/js/ "/>
 </beans>
