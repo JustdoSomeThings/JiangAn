@@ -13,26 +13,32 @@
 <form class="layui-form" action="" lay-filter="orderForm" >
     <div class="layui-form-item" style="margin-top:10px">
         <div class="layui-inline">
-            <label class="layui-form-label">产品类别：</label>
+            <label class="layui-form-label">员工姓名</label>
+            <div class="layui-input-block" style="width:200px">
+                <input type="text" id="name" name="name" lay-verify="name" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">员工性别：</label>
             <div class="layui-input-block">
                 <select class="layui-form-select" name="city" lay-verify="required">
-                    <option value="0">食物类</option>
-                    <option value="1">日用类</option>
-                    <option value="2">水果类</option>
-                    <option value="3">饮料类</option>
+                    <option value="">---请选择---</option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+
                 </select>
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">商品名称:</label>
+            <label class="layui-form-label">部门：</label>
             <div class="layui-input-block">
                 <select class="layui-form-select" name="city" lay-verify="required">
-                    <option value="">大米</option>
-                    <option value="0">香蕉</option>
-                    <option value="1">苹果</option>
-                    <option value="2">洗面奶</option>
-                    <option value="3">可乐</option>
-                    <option value="4">小麦</option>
+                    <option value="">--- 请选择 ---</option>
+                    <option value="0"></option>
+                    <option value="1"></option>
+                    <option value="2"></option>
+                    <option value="3"></option>
+                    <option value="4"></option>
                 </select>
             </div>
         </div>
@@ -40,6 +46,11 @@
     </div>
 </form>
 <table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 
 <script src="../../layui/layui.js" charset="utf-8"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -54,33 +65,40 @@
         var layer = layui.layer;
 
         table.render({
-            id : 'product'
+            id : 'departmentTable'
             ,elem: '#test'
-            ,url:'/firstWeb/product/queryAll'
+            ,url:'/firstWeb/employee/queryAll'
             ,title: '用户数据表'
             ,where: {}
             ,cols: [[
-                {field:'id', title:'编号'}
-                ,{field:'name', title:'商品名称'}
-                ,{field: 'area', title:'产地'}
-                ,{field:'sort', title:'类别名'}
-                ,{field:'ml', title:'规格'}
-
-
+                //"id":1,"partId":1,"loginName":"botao","password":"123",
+                // "img":"upfile/nan1.jpg","gender":"男","flag":1,"admin":1,
+                // "remark":"员工1","trueName":"赵波涛","is":1
+                {field:'id', title:'员工编号'}
+                ,{field:'partId', title:'部门编号(外键)'}
+                ,{field:'loginName', title:'登陆名'}
+                ,{field: 'password', title:'登陆密码'}
+                ,{field:'img', title:'员工图片'}
+                ,{field:'gender', title:'员工性别'}
+                ,{field: 'flag', title:'员工级别'}
+                ,{field:'admin', title:'员工操作系统级别'}
+                ,{field: 'trueName', title:'员工真实姓名'}
+                ,{field: 'is', title:'员工状态'}
+                ,{field: 'right', title:'操作', toolbar: '#barDemo'}
             ]]
             ,page: true // 默认一页十条
             ,limit:5
             ,limits: [1,5,10,20]
         });
-        //刷新页面方法
-        function tableReload(){
-            table.reload('product',{
+
+        $("#formsubmit").click(function(){
+            table.reload('departmentTable',{
                 where : data
                 ,page: {
                     curr: 1
                 }
             })
-        }
+        });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
