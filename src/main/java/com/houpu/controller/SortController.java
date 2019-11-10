@@ -25,7 +25,7 @@ public class SortController {
      * @param limit
      * @return
      */
-    @RequestMapping(value = "queryAll" ,method= RequestMethod.GET)
+    @RequestMapping(value = "/queryAll" ,method= RequestMethod.GET)
     public Map<String, Object> queryAll(int page, int limit){
         // 从第page页开始 每页查询limit数据
         PageHelper.startPage(page, limit);
@@ -42,9 +42,9 @@ public class SortController {
     }
 
 
-    @RequestMapping(value="insert", method = RequestMethod.POST)
+    @RequestMapping(value="/insert", method = RequestMethod.POST)
     public Map<String,Object> insertSort(@RequestBody Sort sort){
-        int i = sortService.inserSort(sort);
+        int i = sortService.insertSort(sort);
         HashMap<String, Object> result = new HashMap<>();
         result.put("is", "0");
         result.put("msg", "执行成功");
