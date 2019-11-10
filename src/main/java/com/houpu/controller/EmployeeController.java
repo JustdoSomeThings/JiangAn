@@ -60,7 +60,6 @@ public class EmployeeController {
      */
     @RequestMapping(value = "/queryEmp", method = RequestMethod.GET)
     public Map<String, Object> queryEmp(int page, int limit) {
-        System.out.println("gggg");
         //从第page页开始 每页查询limit数据
         PageHelper.startPage(page, limit);
         //调用实现类的方法执行业务
