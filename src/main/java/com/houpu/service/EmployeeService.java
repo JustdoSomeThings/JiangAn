@@ -20,4 +20,11 @@ public interface EmployeeService {
      */
     List<String> queryTrueName(Part part);
 
+
+    /**
+     * 查询所有员工
+     * @return
+     */
+    List<Employee> queryEmp();
+
 }

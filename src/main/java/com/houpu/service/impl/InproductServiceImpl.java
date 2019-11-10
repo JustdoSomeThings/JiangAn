@@ -19,4 +19,6 @@ public class InproductServiceImpl implements InproductService {
         return inproductDao.queryAll();
     }
 
+
+
 }
