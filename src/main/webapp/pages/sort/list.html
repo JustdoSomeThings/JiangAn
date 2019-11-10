@@ -10,43 +10,15 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
-
-<form class="layui-form" action="" lay-filter="orderForm">
-    <div class="layui-form-item" style="margin-top:10px">
-        <div class="layui-inline">
-            <label class="layui-form-label">产品类别：</label>
-            <div class="layui-input-block">
-                <select class="layui-form-select" id="sortRemark" lay-filter="sortFilter">
-                </select>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">产品名称：</label>
-            <div class="layui-input-block">
-                <select class="layui-form-select" id="sortName" lay-filter="sortFilter">
-                </select>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">产地：</label>
-            <div class="layui-input-block">
-                <select class="layui-form-select" id="productArea" lay-filter="productFilter">
-                </select>
-            </div>
-        </div>
-        <button type="button" id="formSubmit" class="layui-inline layui-btn" lay-submit="" lay-filter="query">查询</button>
-
+<form class="layui-form" action="" lay-filter="departmentForm">
+    <div class="layui-form-item" style="margin-top:30px">
+        <button type="button" id="add" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="add">新增部门</button>
     </div>
-
-
-
 </form>
-
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
     <button type="button" class="layui-btn layui-btn-sm">
-
         <i class="layui-icon">&#xe640;</i>下架
     </button>
 </script>
@@ -71,9 +43,6 @@
             ,title: '用户数据表'
             ,where: {}
             ,cols: [[
-                //"id":1,"partId":1,"loginName":"botao","password":"123",
-                // "img":"upfile/nan1.jpg","gender":"男","flag":1,"admin":1,
-                // "remark":"员工1","trueName":"赵波涛","is":1
                 {field:'id', title:'编号'}
                 ,{field:'name', title:'类别名称'}
                 ,{field: 'remark', title:'类别备注'}
@@ -84,79 +53,58 @@
             ,limit:5
             ,limits: [1,5,10,20]
         });
-
-
-        //页面加载时向下拉选框中加载数据
-        $(document).ready(function() {
-            axios.post('/firstWeb/part/querySortName').then(function (response) {
-                var role = document.getElementById("partName");
-                var data = response.data;
-                for(var i = 0; i < data.length; i++) {
-                    var value = Object.keys(data);
-                    var label = Object.values(data);
-                    var option = document.createElement("option");  // 创建添加option属性
-                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
-                    option.innerText = label[i];    			    // 打印option对应的纯文本
-                    role.appendChild(option);  					    //给select添加option子标签
-                }
-                form.render("select");
-            }).catch(function (error) {
-                console.log(error);
-            });
-        });
-
-        //部门名称select监听器
-        form.on('select(partFilter)', function(data) {
-            $("#employeeTrueName").empty();
-            var partName = {"name": data.elem[data.elem.selectedIndex].text};
-            axios.post('/firstWeb/employee/queryTrueName', partName).then(function(response) {
-                var role = document.getElementById("employeeTrueName");
-                var data = response.data;
-                for(var i = 0; i < data.length; i++) {
-                    var value = Object.keys(data);
-                    var label = Object.values(data);
-                    var option = document.createElement("option");  // 创建添加option属性
-                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
-                    option.innerText = label[i];    			    // 打印option对应的纯文本
-                    role.appendChild(option);  					    // 给select添加option子标签
-                }
-                form.render("select");
-            }).catch(function (error) {
-                console.log(error);
-            });
-        });
-
-        //员工姓名select监听器
-        form.on('select(employeeFilter)', function(data) {
-            $("#clientName").empty();
-            var employeeTrueName = {"trueName": data.elem[data.elem.selectedIndex].text};
-            console.log(employeeTrueName);
-            axios.post('/firstWeb/client/queryName', employeeTrueName).then(function(response) {
-                var role = document.getElementById("clientName");
-                var data = response.data;
-                console.log(response);
-                for(var i = 0; i < data.length; i++) {
-                    var value = Object.keys(data);
-                    var label = Object.values(data);
-                    var option = document.createElement("option");  // 创建添加option属性
-                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
-                    option.innerText = label[i];    			    // 打印option对应的纯文本
-                    role.appendChild(option);  					    // 给select添加option子标签
-                }
-                form.render("select");
-            }).catch(function (error) {
-                console.log(error);
-            });
-        });
-
-        $("#formsubmit").click(function(){
+        //刷新页面方法
+        function tableReload(){
             table.reload('departmentTable',{
                 where : data
                 ,page: {
                     curr: 1
                 }
             })
-        });
+        }
+
+
+
+
+        $("#add").click(function(){
+
+            layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '新增页面'
+                ,area: ['390px', '260px']
+                ,shade: 0
+                ,maxmin: true
+                ,content: 'add.html'
+                ,btn: ['提交', '关闭']
+                ,yes: function(index){
+                    var data = window['layui-layer-iframe' + index].getValue();
+                    if (!data.name) {
+                        layer.msg("类别名称不能为空");
+                        return false;
+                    }
+
+                    //发送新增请求 get/post √
+                    axios.post('/firstWeb/sort/insert', data).then(function (response) {
+                        //post请求执行成功的回调
+                        if (response.data.status == "0") {
+                            layer.close(index);
+                            //刷新表格
+                            tableReload();
+                            layer.msg("新增成功");
+
+                        } else {
+                            layer.msg(response.data.msg)
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                    layer.close(index);
+                }
+                ,btn2: function(index){//5
+                    layer.close(index);
+                }
+            });
+        })
 
         //监听行工具事件
         table.on('tool(test)', function(obj){

@@ -30,42 +30,12 @@ public class ProductController {
     public Map<String, Object> queryAll(int page, int limit) {
         // 从第page页开始 每页查询limit数据
         PageHelper.startPage(page, limit);
-
-        List<Product> clientList = productService.queryAll();
-        PageInfo<Product> pageInfo = new PageInfo<>(clientList, limit);
-
+        List<Product> list = productService.queryAllProduct();
+        PageInfo<Product> pageInfo = new PageInfo<>(list, limit);
         HashMap<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("data", pageInfo.getList());
         result.put("count", pageInfo.getTotal());
-
         return result;
-    }
-
-    /**
-     * 删除一个产品(可恢复)
-     * @param partId
-     */
-    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
-    public void updateState(Integer partId) {
-        productService.updateState(partId);
-    }
-
-    /**
-     * 更新一个产品
-     * @param product
-     */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public void update(Product product) {
-        productService.update(product);
-    }
-
-    /**
-     * 新增一个产品
-     * @param product
-     */
-    @RequestMapping(value = "/saveClient", method = RequestMethod.POST)
-    public void saveProduct(Product product) {
-        productService.saveProduct(product);
     }
 }

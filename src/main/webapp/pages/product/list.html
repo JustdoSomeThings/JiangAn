@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script src="../../layui/layui.js" charset="utf-8"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use(['table','form','jquery','layer'], function(){
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        table.render({
+            id : 'product'
+            ,elem: '#test'
+            ,url:'/firstWeb/product/queryAll'
+            ,title: '用户数据表'
+            ,where: {}
+            ,cols: [[
+                {field:'id', title:'编号'}
+                ,{field:'name', title:'商品名称'}
+                ,{field: 'area', title:'产地'}
+                ,{field:'sort', title:'类别名'}
+                ,{field:'ml', title:'规格'}
+
+
+            ]]
+            ,page: true // 默认一页十条
+            ,limit:5
+            ,limits: [1,5,10,20]
+        });
+        //刷新页面方法
+        function tableReload(){
+            table.reload('product',{
+                where : data
+                ,page: {
+                    curr: 1
+                }
+            })
+        }
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            //console.log(obj)
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.prompt({
+                    formType: 2
+                    ,value: data.email
+                }, function(value, index){
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

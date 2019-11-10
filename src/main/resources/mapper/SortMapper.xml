@@ -16,7 +16,7 @@
     </select>
 
     <!-- 新增类别 -->
-    <insert id="inserSort" parameterType="com.houpu.model.Sort">
+    <insert id="insertSort" parameterType="com.houpu.model.Sort">
         insert into t_sort(s_name, s_remark, s_is)
         values(#{name}, #{remark}, '0')
     </insert>

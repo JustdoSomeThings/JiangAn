@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.ProductDao">
+    <resultMap id="productResultMap" type="com.houpu.model.Product">
+        <id property="id" column="p_id"/>
+        <id property="sortId" column="s_id"/>
+        <id property="name" column="p_name"/>
+        <id property="area" column="p_area"/>
+        <id property="ml" column="p_ml"/>
+        <id property="is" column="p_is"/>
+        <association property="sort" javaType="com.houpu.model.Sort">
+            <id property="id" column="s_id"></id>
+            <id property="name" column="s_name"></id>
+            <id property="remark" column="s_remark"/>
+            <id property="is" column="s_is"/>
+        </association>
+    </resultMap>
+
+    <select id="queryAllProduct" resultMap="productResultMap">
+            SELECT p.p_id,p.p_name, p.p_area,s.s_name,p.p_ml,p.p_is
+            FROM t_sort s,t_product p
+            WHERE s.s_id=p.s_id
+
+    </select>
+
+</mapper>
