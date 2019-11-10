@@ -15,7 +15,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sort")
 public class SortController {
-
     @Autowired
     private SortService sortService;
 

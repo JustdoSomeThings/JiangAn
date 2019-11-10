@@ -58,7 +58,7 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:load_sort();">类别管理</a></dd>
                         <dd><a href="javascript:;">产品管理</a></dd>
-                        <dd><a href="javascript:;">产品查询</a></dd>
+                        <dd><a href="javascript:load_product();">产品查询</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -128,6 +128,11 @@
     function load_sort() {
         document.getElementById("main").innerHTML =
             '<object type="text/html" data="sort/list.html" width="100%" height="600px"></object>';
+    }
+    //产品
+    function load_product() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="product/list.html" width="100%" height="600px"></object>';
     }
 
     //库存
