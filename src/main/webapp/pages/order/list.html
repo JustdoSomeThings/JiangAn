@@ -67,8 +67,6 @@
         var form = layui.form;
         var $ = layui.jquery;
         var layer = layui.layer;
-        // var client = table.client;
-        // console.log(client);
         table.render({
             id : 'orderTable'
             ,elem: '#test'
@@ -77,8 +75,12 @@
             ,where: {}
             ,cols: [[
                 {field:'id', title:'订单编号'}
-                ,{field:'client', title:'客户姓名'}
-                ,{field:'employee', title:'下单员工'}
+                ,{field:'client', title:'客户姓名', templet: function(data) {
+                    return data.client.name;
+                 }}
+                ,{field:'employee', title:'下单员工', templet: function(data) {
+                    return data.employee.trueName;
+                 }}
                 ,{field:'time', title:'下单时间'}
                 ,{field: 'is', title:'订单状态', templet: function(d) {
                     if(0 == d.is) {
