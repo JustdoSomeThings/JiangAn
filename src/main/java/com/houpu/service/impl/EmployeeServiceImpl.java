@@ -25,4 +25,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDao.queryTrueName(part);
     }
 
+    @Override
+    public List<Employee> queryEmp() {
+        return employeeDao.queryEmp();
+    }
+
 }

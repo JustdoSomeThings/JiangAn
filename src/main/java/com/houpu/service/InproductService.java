@@ -10,4 +10,6 @@ public interface InproductService {
      * @return
      */
     List<Inproduct> queryAll();
+
+
 }

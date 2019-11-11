@@ -38,4 +38,9 @@
         WHERE
             p_name = #{name})
     </select>
+
+    <!-- 客户管理查询 -->
+    <select id="queryEmp" resultMap="EmployeeResultMap">
+        select e_id,e_loginname,e_sex,e_remark from t_emp
+    </select>
 </mapper>

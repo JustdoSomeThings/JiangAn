@@ -18,4 +18,10 @@ public interface EmployeeDao {
      * @return
      */
     List<String> queryTrueName(Part part);
+
+    /**
+     * 根据查询所有员工的真实姓名
+     * @return
+     */
+    List<Employee> queryEmp();
 }

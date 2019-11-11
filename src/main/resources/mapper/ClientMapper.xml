@@ -15,16 +15,16 @@
     <!-- 根据员工姓名查询客户姓名 -->
     <select id="queryName" parameterType="employee" resultType="java.lang.String">
         SELECT
-            c_name
+        c_name
         FROM
-            t_client
+        t_client
         WHERE
-            c_id = (
-            SELECT
-                c_id
-            FROM
-                t_emp
+        c_id = (
+        SELECT
+        c_id
+        FROM
+        t_emp
         WHERE
-            e_truename = #{trueName})
+        e_truename = #{trueName})
     </select>
 </mapper>
