@@ -39,4 +39,11 @@ public class ClientServiceImpl implements ClientService {
     public void saveClient(Client client) {
         clientDao.saveClient(client);
     }
+
+    @Override
+    public List<Client> queryAllClientIs( Integer is) {
+        return clientDao.queryAllClientIs(is);
+    }
+
+
 }

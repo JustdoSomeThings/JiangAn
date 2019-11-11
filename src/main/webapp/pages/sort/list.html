@@ -13,7 +13,8 @@
 <form class="layui-form" action="" lay-filter="departmentForm">
     <div class="layui-form-item" style="margin-top:30px">
         <button type="button" id="add" class="layui-btn layui-btn-warm" lay-submit=""  >增加类别</button>
-        <button type="button" id="update" class="layui-btn layui-btn-warm" lay-submit=""  >下架类别按钮</button>
+        <button type="button" id="all" class="layui-btn layui-btn-warm" lay-submit=""  >所有类别</button>
+        <button type="button" id="update" class="layui-btn layui-btn-lg" lay-submit=""  >下架类别按钮</button>
     </div>
 </form>
 <table class="layui-hide" id="test" lay-filter="test"></table>
@@ -63,6 +64,17 @@
                 }
             })
         }
+        $("#all").click(function () {
+            table.reload('departmentTable',{
+                url:"/firstWeb/sort/queryAll",
+                where : data
+                ,page: {
+                    curr: 1
+                }
+            })
+
+        })
+
         $("#update").on('click',function () {
             tableReload1();
         })

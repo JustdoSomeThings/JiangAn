@@ -15,6 +15,7 @@
         select p_name from t_part where p_is = 1
     </select>
 
+
     <!-- 查询状态为存在的部门 -->
     <select id="queryLike" parameterType="part" resultMap="partResultMap">
         select * from t_part where p_is = 1

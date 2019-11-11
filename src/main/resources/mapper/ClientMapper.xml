@@ -11,7 +11,10 @@
         <result property="address" column="c_address"></result>
         <result property="is" column="c_is"></result>
     </resultMap>
-
+    <!--    删除员工-->
+    <select id="queryAllClientIs" resultMap="clientResultMap" parameterType="int">
+        select * from t_client where c_is=#{is}
+    </select>
     <!-- 根据员工姓名查询客户姓名 -->
     <select id="queryName" parameterType="employee" resultType="java.lang.String">
         SELECT
@@ -27,4 +30,12 @@
         WHERE
         e_truename = #{trueName})
     </select>
+
+    <select id="queryAll" resultMap="clientResultMap" >
+        select * from t_client
+    </select>
+
+
+
+
 </mapper>

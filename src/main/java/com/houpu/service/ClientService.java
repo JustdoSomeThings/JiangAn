@@ -38,4 +38,10 @@ public interface ClientService {
      * @param client
      */
     void saveClient(Client client);
+
+    /**
+     * 查询删除的客户
+     * @return
+     */
+    List<Client> queryAllClientIs(Integer is);
 }

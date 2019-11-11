@@ -28,6 +28,8 @@
         where  p.p_id=e.p_id
     </select>
 
+
+
     <!-- 查询所有员工的真实姓名 -->
     <select id="queryTrueName" parameterType="part" resultType="java.lang.String">
         SELECT
@@ -49,4 +51,7 @@
     <select id="queryEmp" resultMap="EmployeeResultMap">
         select e_id,e_loginname,e_sex,e_remark from t_emp
     </select>
+
+
+
 </mapper>
