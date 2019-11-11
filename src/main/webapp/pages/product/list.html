@@ -63,9 +63,10 @@
                 {field:'id', title:'编号'}
                 ,{field:'name', title:'商品名称'}
                 ,{field: 'area', title:'产地'}
-                ,{field:'sort', title:'类别名'}
+                ,{field:'sort', title:'类别名',templet:function (data){
+                        return data.sort.name;
+                    }}
                 ,{field:'ml', title:'规格'}
-
 
             ]]
             ,page: true // 默认一页十条

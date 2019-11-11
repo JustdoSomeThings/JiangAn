@@ -15,11 +15,17 @@
         <result property="remark" column="e_remark"/>
         <result property="trueName" column="e_truename"/>
         <result property="is" column="e_is"/>
+        <association property="part" javaType="com.houpu.model.Part">
+            <id property="id" column="p_id"/>
+            <id property="name" column="p_name"/>
+        </association>
     </resultMap>
 
     <!-- 查询所有员工 -->
     <select id="queryAllEmployee" resultMap="EmployeeResultMap">
-        select * from t_emp
+       SELECT e.e_id,p.p_name,e.e_loginname,e.e_psw,e.e_img,e.e_sex,e.e_flag,e.e_admin,e.e_truename,e.e_remark,e.e_is
+        FROM t_part p,t_emp e
+        where  p.p_id=e.p_id
     </select>
 
     <!-- 查询所有员工的真实姓名 -->
