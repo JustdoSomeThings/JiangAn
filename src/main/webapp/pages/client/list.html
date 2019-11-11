@@ -10,6 +10,7 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
@@ -33,21 +34,14 @@
         table.render({
             id : 'departmentTable'
             ,elem: '#test'
-            ,url:'/firstWeb/employee/queryAll'
+            ,url:'/firstWeb/employee/queryEmp'
             ,title: '用户数据表'
             ,where: {}
             ,cols: [[
-                {field:'id', title:'员工编号'}
-                ,{field:'partId', title:'部门编号(外键)'}
-                ,{field:'loginName', title:'登陆名'}
-               ,{field: 'password', title:'登陆密码'}
-                ,{field:'img', title:'员工图片'}
-                ,{field:'gender', title:'员工性别'}
-                ,{field: 'flag', title:'员工级别'}
-                ,{field:'admin', title:'员工操作系统级别'}
-                ,{field:'remark', title:'员工备注'}
-                ,{field: 'trueName', title:'员工真实姓名'}
-                ,{field: 'is', title:'员工状态'}
+                {field:'id', title:'编号'}
+                ,{field:'loginName', title:'姓名'}
+                ,{field:'gender', title:'性别'}
+                ,{field:'remark', title:'备注'}
                 ,{field: 'right', title:'操作', toolbar: '#barDemo'}
             ]]
             ,page: true // 默认一页十条

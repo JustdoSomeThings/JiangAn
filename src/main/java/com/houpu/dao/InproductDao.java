@@ -7,7 +7,7 @@ import java.util.List;
 public interface InproductDao {
 
     /**
-     * 查询所有Inproduct
+     * 查询所有库存
      * @return
      */
     List<Inproduct> queryAll();
