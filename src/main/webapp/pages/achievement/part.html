@@ -14,21 +14,21 @@
             <div class="layui-inline">
                 <label class="layui-form-label">部门名称：</label>
                 <div class="layui-input-block">
-                    <select class="layui-form-select" id="partName1" lay-filter="partName1">
+                    <select class="layui-form-select" id="partName1" lay-filter="filter1">
                     </select>
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">部门名称：</label>
                 <div class="layui-input-block">
-                    <select class="layui-form-select" id="partName2" lay-filter="employeeFilter">
+                    <select class="layui-form-select" id="partName2" lay-filter="filter2">
                     </select>
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">部门名称：</label>
                 <div class="layui-input-block">
-                    <select class="layui-form-select" id="partName3" lay-filter="clientFilter">
+                    <select class="layui-form-select" id="partName3" lay-filter="filter3">
                     </select>
                 </div>
             </div>
@@ -48,7 +48,6 @@
             axios.post('/firstWeb/part/queryName').then(function (response) {
                 var role = document.getElementById("partName1");
                 var data = response.data;
-                console.log(data);
                 for (var i = 0; i < data.length; i++) {
                     var value = Object.keys(data);
                     var label = Object.values(data);
@@ -64,7 +63,7 @@
 
 
             var seriesData = [];
-            axios.post('/firstWeb/order/queryAchievement').then(function (response) {
+            axios.post('/firstWeb/order/queryAchievement').then(function(response) {
                 seriesData = response.data;
                 LineChart('main', '部门业绩统计图', seriesData);
             }).catch(function (error) {
@@ -73,9 +72,13 @@
         });
 
         //1监听器
-        form.on('select(partName1)', function(data) {
-            $("#partName2").empty();
-            var partName2 = {"name": data.elem[data.elem.selectedIndex].text};
+        form.on('select(filter1)', function(data) {
+            var obj = document.getElementsByTagName("select");
+            console.log(data.elem.selectedIndex);
+            console.log(obj[data.elem.selectedIndex]);
+
+
+
             axios.post('/firstWeb/part/queryName', partName2).then(function(response) {
                 var role = document.getElementById("partName2");
                 var data = response.data;
@@ -94,7 +97,7 @@
         });
 
         //2监听器
-        form.on('select(partName2)', function(data) {
+        form.on('select(filter2)', function(data) {
             $("#partName3").empty();
             var partName3 = {"name": data.elem[data.elem.selectedIndex].text};
             axios.post('/firstWeb/part/queryName', partName3).then(function(response) {
