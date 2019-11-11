@@ -20,6 +20,10 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    /**
+     * 查询所有订单
+     * @return
+     */
     @RequestMapping(value = "/queryAll", method = RequestMethod.GET)
     public Map<String, Object> queryAll(int page, int limit) {
         // 从第page页开始 每页查询limit数据
@@ -33,19 +37,13 @@ public class OrderController {
         return result;
     }
 
+    /**
+     * 查询各部门业绩(订单数量)
+     * @return
+     */
     @RequestMapping(value = "/queryAchievement", method = RequestMethod.POST)
     public List<Map<String, Object>> queryAchievement() {
-        List<Map<String, Object>> result = orderService.queryAchievement();
-        for (Map<String, Object> stringObjectMap : result) {
-            String key = null;
-            Object value = null;
-            for (Map.Entry<String, Object> field : stringObjectMap.entrySet()) {
-                key = field.getKey();
-                value = field.getValue();
-                System.out.println(key + " : " + value);
-            }
-        }
-        return result;
+        return orderService.queryAchievement();
     }
 
 }
