@@ -14,6 +14,11 @@
     <select id="queryAllSort" resultMap="sort">
             select * from t_sort
     </select>
+<!--    下架类别-->
+    <select id="queryAllSortIs" resultMap="sort" parameterType="int">
+        select * from t_sort where s_is=#{is}
+
+    </select>
 
     <!-- 新增类别 -->
     <insert id="insertSort" parameterType="com.houpu.model.Sort">
