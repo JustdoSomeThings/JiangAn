@@ -4,85 +4,179 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="../../js/echarts.min.js"></script>
-    <script src="../../js/jquery-3.4.1.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="../../layui/layui.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../layui/css/layui.css">
 </head>
 <body>
-    <div id="main" class="layui-card-body" style="width: 100%; height:300%;">
+    <form class="layui-form" action="" lay-filter="achievementPartForm">
+            <div class="layui-form-item" style="margin-top:10px">
+            <div class="layui-inline">
+                <label class="layui-form-label">部门名称：</label>
+                <div class="layui-input-block">
+                    <select class="layui-form-select" id="partName1" lay-filter="filter1">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">部门名称：</label>
+                <div class="layui-input-block">
+                    <select class="layui-form-select" id="partName2" lay-filter="filter2">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">部门名称：</label>
+                <div class="layui-input-block">
+                    <select class="layui-form-select" id="partName3" lay-filter="filter3">
+                    </select>
+                </div>
+            </div>
+            <button type="button" id="queryOrder" class="layui-inline layui-btn" lay-event="query">查询</button>
+        </div>
+    </form>
+    <div id="main" class="layui-card-body" style="margin:0 auto; width: 500px; height: 500px;">
     </div>
 </body>
 
+<script src="../../js/jquery-3.4.1.js"></script>
 <script>
-    $(document).ready(function() {
-        var seriesData = [];
-        axios.post('/firstWeb/order/queryAchievement').then(function (response) {
-            seriesData = response.data;
-            console.log(seriesData);
-            LineChart('main', '部门业绩统计图', seriesData);
-        }).catch(function (error) {
-            console.log(error);
-        });
-    });
+    layui.use(['form'], function() {
+        var form = layui.form;
 
-    var LineChart = function(ID, title, seriesData) {
-        var myChart = echarts.init(document.getElementById(ID));
-        var option = {
-            //标题设置
-            title: {
-                text: title,
-                subtext: '',
-                // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
-                x: 'center',
-                // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
-                y: 'top',
-                // itemGap设置主副标题纵向间隔，单位px，默认为10，
-                itemGap: 30,
-                backgroundColor: '#EEE',
-                // 主标题文本样式设置
-                textStyle: {
-                    fontSize: 26,
-                    fontWeight: 'bolder',
-                    color: '#000080'
-                },
-                // 副标题文本样式设置
-                subtextStyle: {
-                    fontSize: 18,
-                    color: '#8B2323'
+        $(document).ready(function () {
+            axios.post('/firstWeb/part/queryName').then(function (response) {
+                var role = document.getElementById("partName1");
+                var data = response.data;
+                for (var i = 0; i < data.length; i++) {
+                    var value = Object.keys(data);
+                    var label = Object.values(data);
+                    var option = document.createElement("option");  // 创建添加option属性
+                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
+                    option.innerText = label[i];    			    // 打印option对应的纯文本
+                    role.appendChild(option);  					    // 给select添加option子标签
                 }
-            },
-            //值域设置
-            series: [
-                {
-                    name: '生源地',
-                    type: 'pie',
-                    radius: '50%',  // 设置饼状图大小，100%时，最大直径=整个图形的min(宽，高)
-                    // radius: ['30%', '60%'],  // 设置环形饼状图， 第一个百分数设置内圈大小，第二个百分数设置外圈大小
-                    center: ['50%', '50%'],  // 设置饼状图位置，第一个百分数调水平位置，第二个百分数调垂直位置
-                    data: seriesData,
-                    // itemStyle 设置饼状图扇形区域样式
-                    itemStyle: {
-                        // emphasis：英文意思是 强调;着重;（轮廓、图形等的）鲜明;突出，重读
-                        // emphasis：设置鼠标放到哪一块扇形上面的时候，扇形样式、阴影
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(30, 144, 255，0.5)'
-                        }
+                form.render("select");
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+
+            var seriesData = [];
+            axios.post('/firstWeb/order/queryAchievement').then(function(response) {
+                seriesData = response.data;
+                LineChart('main', '部门业绩统计图', seriesData);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+
+        //1监听器
+        form.on('select(filter1)', function(data) {
+            var obj = document.getElementsByTagName("select");
+            console.log(data.elem.selectedIndex);
+            console.log(obj[data.elem.selectedIndex]);
+
+
+
+            axios.post('/firstWeb/part/queryName', partName2).then(function(response) {
+                var role = document.getElementById("partName2");
+                var data = response.data;
+                for(var i = 0; i < data.length; i++) {
+                    var value = Object.keys(data);
+                    var label = Object.values(data);
+                    var option = document.createElement("option");  // 创建添加option属性
+                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
+                    option.innerText = label[i];    			    // 打印option对应的纯文本
+                    role.appendChild(option);  					    // 给select添加option子标签
+                }
+                form.render("select");
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+
+        //2监听器
+        form.on('select(filter2)', function(data) {
+            $("#partName3").empty();
+            var partName3 = {"name": data.elem[data.elem.selectedIndex].text};
+            axios.post('/firstWeb/part/queryName', partName3).then(function(response) {
+                var role = document.getElementById("partName3");
+                var data = response.data;
+                for(var i = 0; i < data.length; i++) {
+                    var value = Object.keys(data);
+                    var label = Object.values(data);
+                    var option = document.createElement("option");  // 创建添加option属性
+                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
+                    option.innerText = label[i];    			    // 打印option对应的纯文本
+                    role.appendChild(option);  					    // 给select添加option子标签
+                }
+                form.render("select");
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+
+        var LineChart = function (ID, title, seriesData) {
+            var myChart = echarts.init(document.getElementById(ID));
+            var option = {
+                //标题设置
+                title: {
+                    text: title,
+                    subtext: '',
+                    // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+                    x: 'center',
+                    // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+                    y: 'top',
+                    // itemGap设置主副标题纵向间隔，单位px，默认为10，
+                    itemGap: 30,
+                    backgroundColor: '#EEE',
+                    // 主标题文本样式设置
+                    textStyle: {
+                        fontSize: 26,
+                        fontWeight: 'bolder',
+                        color: '#000080'
                     },
-                    // 设置值域的标签
-                    label: {
-                        normal: {
-                            position: 'outer',  // 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
-                            // formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
-                            // {a}指series.name  {b}指series.data的name
-                            // {c}指series.data的value  {d}%指这一部分占总数的百分比
-                            formatter: '{b}{d}%'
+                    // 副标题文本样式设置
+                    subtextStyle: {
+                        fontSize: 18,
+                        color: '#8B2323'
+                    }
+                },
+                //值域设置
+                series: [
+                    {
+                        name: '生源地',
+                        type: 'pie',
+                        radius: '50%',  // 设置饼状图大小，100%时，最大直径=整个图形的min(宽，高)
+                        // radius: ['30%', '60%'],  // 设置环形饼状图， 第一个百分数设置内圈大小，第二个百分数设置外圈大小
+                        center: ['50%', '50%'],  // 设置饼状图位置，第一个百分数调水平位置，第二个百分数调垂直位置
+                        data: seriesData,
+                        // itemStyle 设置饼状图扇形区域样式
+                        itemStyle: {
+                            // emphasis：英文意思是 强调;着重;（轮廓、图形等的）鲜明;突出，重读
+                            // emphasis：设置鼠标放到哪一块扇形上面的时候，扇形样式、阴影
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(30, 144, 255，0.5)'
+                            }
+                        },
+                        // 设置值域的标签
+                        label: {
+                            normal: {
+                                position: 'outer',  // 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
+                                // formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
+                                // {a}指series.name  {b}指series.data的name
+                                // {c}指series.data的value  {d}%指这一部分占总数的百分比
+                                formatter: '{b}{d}%'
+                            }
                         }
                     }
-                }
-            ],
-        };
-        myChart.setOption(option);
-    }
+                ],
+            };
+            myChart.setOption(option);
+        }
+    });
 </script>
 </html>

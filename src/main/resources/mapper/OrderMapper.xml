@@ -24,7 +24,7 @@
     </resultMap>
 
     <!-- 查询所有订单 -->
-    <select id="queryAll" resultMap="orderResultMap">
+    <select id="queryAll" parameterType="map" resultMap="orderResultMap">
         SELECT
             t_orders.*,
             t_client.c_name,
@@ -36,6 +36,15 @@
         WHERE
             t_orders.e_id = t_emp.e_id
             AND t_orders.c_id = t_client.c_id
+            <if test="partName != null">
+                t_emp.p_id = (select p_id from t_part where p_name = #{name})
+            </if>
+            <if test="employeeTrueName != null">
+
+            </if>
+            <if test="clientName != null">
+
+            </if>
     </select>
 
 
