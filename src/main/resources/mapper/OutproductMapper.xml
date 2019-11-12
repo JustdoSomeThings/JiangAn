@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.houpu.dao.OutproductDao">
+    <resultMap id="outproductResultMap" type="com.houpu.model.Outproduct">
+        <id property="o_id" column="o_id"></id>
+        <result property="o_int" column="o_int"></result>
+        <result property="o_time" column="o_time"></result>
+        <result property="o_remark" column="o_remark"></result>
+        <!-- 关联product表 -->
+        <association property="product" javaType="com.houpu.model.Product">
+            <id property="id" column="p_id"></id>
+            <result property="name" column="p_name"></result>
+        </association>
+        <!-- 关联client表 -->
+        <association property="client" javaType="com.houpu.model.Client">
+            <id property="id" column="c_id"></id>
+            <result property="name" column="c_name"></result>
+        </association>
+    </resultMap>
+    <!-- 查询所有Inproduct -->
+    <select id="showAll" resultMap="outproductResultMap">
+       SELECT
+            t_outproduct.*,
+            t_product.p_name,
+            t_client.c_name
+
+        FROM
+            t_product,
+            t_outproduct,
+            t_client
+        WHERE
+            t_outproduct.p_id=t_product.p_id
+        AND
+            t_outproduct.e_id=t_client.e_id
+    </select>
+
+
+
+</mapper>
