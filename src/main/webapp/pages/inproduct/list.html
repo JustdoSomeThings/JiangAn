@@ -14,14 +14,22 @@
 <form class="layui-form" action="" lay-filter="orderForm" >
     <div class="layui-form-item" style="margin-top:10px">
         <div class="layui-inline">
-            <label class="layui-form-label">部门名称：</label>
+            <label class="layui-form-label">产品类别：</label>
             <div class="layui-input-block">
-                <select class="layui-form-select" id="partName" name="partName" lay-filter="partFilter">
+<!--                <select class="layui-form-select" id="partName" name="partName" lay-filter="partFilter">-->
+<!--                </select>-->
+                <select class="layui-form-select" name="city" lay-verify="required">
+                    <option value=""></option>
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                    <option value="3">深圳</option>
+                    <option value="4">杭州</option>
                 </select>
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">员工姓名：</label>
+            <label class="layui-form-label">产品名称：</label>
             <div class="layui-input-block">
                 <select class="layui-form-select" name="city" lay-verify="required">
                     <option value=""></option>
@@ -34,7 +42,7 @@
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">客户姓名：</label>
+            <label class="layui-form-label">产地：</label>
             <div class="layui-input-block">
                 <select class="layui-form-select" name="city" lay-verify="required">
                     <option value=""></option>
@@ -47,9 +55,6 @@
             </div>
         </div>
         <button type="button" id="formSubmit" class="layui-inline layui-btn" lay-submit="" lay-filter="query">查询</button>
-        <button type="button" id="select1" class="layui-inline layui-btn layui-btn-warm" lay-submit="" lay-filter="add">查询已完成订单</button>
-        <button type="button" id="select2" class="layui-inline layui-btn layui-btn-warm" lay-submit="" lay-filter="add">查询废弃订单</button>
-        <button type="button" id="select3" class="layui-inline layui-btn layui-btn-warm" lay-submit="" lay-filter="add">添加订单</button>
     </div>
 </form>
 
@@ -71,10 +76,12 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-</script>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">入库</a>
 
+</script>
+<script type="text/html" id="barDemo1">
+    <a href="./outlist.html" class="layui-btn layui-btn-xs">出入库查询</a>
+</script>
 
 <script src="../../layui/layui.js" charset="utf-8"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -95,14 +102,38 @@
             ,title: '出入库管理表'
             ,where: {}
             ,cols: [[
-                {field:'id', title:'库存编号'}
-                ,{field:'remark', title:'库存备注'}
+                {field:'id', title:'编号'}
+                ,{field:'sort', title:'产品类别', templet: function (data) {
+                            return data.sort.name;
+                        }}
+                ,{field:'time',title:'产品名', templet: function (data) {
+                        return data.product.name;
+                    }}
+                ,{field:'product',title:'产地', templet: function (data) {
+                        return data.product.area;
+                    }}
+                ,{field:'p_area',title:'规格', templet: function (data) {
+                        return data.product.ml;
+                    }}
+                ,{fixed: 'right', title:'出入库查询', toolbar: '#barDemo1'}
                 ,{field:'count',title:'库存数量'}
-                ,{field:'time',title:'库存时间'}
-                ,{field:'product',title:'水果名称'}
-                ,{field:'p_area',title:'水果产地'}
-                ,{field:'s_name',title:'分类名称'}
-                ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
+                ,{fixed: 'right', title:'入库', toolbar: '#barDemo'}
+                /*
+                 {field: 'o_id', title: '编号'}
+                , {
+                    field: 'product', title: '产品名', templet: function (data) {
+                        return data.product.name;
+                    }
+                }
+                , {
+                    field: 'client', title: '入库申请人', templet: function (data) {
+                        return data.client.name;
+                    }
+                }
+                , {field: 'o_remark', title: '入库备注'}
+                , {field: 'o_int', title: '入库数量'}
+                , {field: 'o_time', title: '入库时间'}
+                 */
             ]]
             ,page: true // 默认一页十条
             ,limit:5
@@ -185,11 +216,11 @@
             } else if(obj.event === 'edit') {//编辑
                 layer.open({
                     type: 2 //此处以iframe举例
-                    ,title: '修改页面'
-                    ,area: ['390px', '260px']
+                    ,title: '商品入库'
+                    ,area: ['600px', '360px']
                     ,shade: 0
                     ,maxmin: true
-                    ,content: 'dialog.html'
+                    ,content: 'addproduct.html'
                     ,btn: ['提交', '关闭']
                     ,yes: function(index){
                         var data = window['layui-layer-iframe' + index].getValue();

@@ -15,14 +15,22 @@
     <div class="layui-form-item" style="margin-top:10px">
         <div class="layui-inline">
 
-            <label class="layui-form-label">产品名称：</label>
+            <label class="layui-form-label">产品类别：</label>
             <div class="layui-input-block">
-                <select class="layui-form-select" id="partName" name="partName" lay-filter="partFilter">
+<!--                <select class="layui-form-select" id="partName" name="partName" lay-filter="partFilter">-->
+<!--                </select>-->
+                <select class="layui-form-select" name="city" lay-verify="required">
+                    <option value=""></option>
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                    <option value="3">深圳</option>
+                    <option value="4">杭州</option>
                 </select>
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">产品类别：</label>
+            <label class="layui-form-label">产品名称：</label>
             <div class="layui-input-block">
                 <select class="layui-form-select" name="city" lay-verify="required">
                     <option value=""></option>
@@ -128,11 +136,6 @@
             , limits: [1, 5, 10, 20]
         });
     });
-
-
-
-
-
 
 </script>
 
