@@ -45,7 +45,7 @@
         var form = layui.form;
         var data;
         $(document).ready(function () {
-            axios.post('/firstWeb/part/queryName').then(function (response) {
+            axios.post('/firstWeb/part/queryName').then(function(response) {
                 var role1 = document.getElementById("partName1");
                 var role2 = document.getElementById("partName2");
                 var role3 = document.getElementById("partName3");
@@ -55,21 +55,21 @@
                     var label = Object.values(data);
 
                     var option1 = document.createElement("option");
-                    option1.setAttribute("value", value[i]);
+                    option1.setAttribute("value", value[i - 1]);
                     if(i != 0) {
                         option1.innerText = label[i - 1];
                     }
                     role1.appendChild(option1);
 
                     var option2 = document.createElement("option");
-                    option2.setAttribute("value", value[i]);
+                    option2.setAttribute("value", value[i - 1]);
                     if(i != 0) {
                         option2.innerText = label[i - 1];
                     }
                     role2.appendChild(option2);
 
                     var option3 = document.createElement("option");
-                    option3.setAttribute("value", value[i]);
+                    option3.setAttribute("value", value[i - 1]);
                     if(i != 0) {
                         option3.innerText = label[i - 1];
                     }
@@ -91,48 +91,49 @@
         });
 
         //1监听器
-        form.on('select(filter1)', function(data) {
-            var option1 = $("#partName1 option:selected");
-            var option2 = $("#partName2 option:selected");
-            var option3 = $("#partName3 option:selected");
-            var names = {"name1": option1.text(), "name2": option2.text(), "name3": option3.text()};
-            console.log(names);
-            axios.post('/firstWeb/part/queryName', names).then(function(response) {
-                var role = document.getElementById("partName2");
-                var data = response.data;
-                for(var i = 0; i < data.length; i++) {
-                    var value = Object.keys(data);
-                    var label = Object.values(data);
-                    var option = document.createElement("option");
-                    option.setAttribute("value", value[i]);
-                    option.innerText = label[i];
-                    role.appendChild(option);
-                }
-                form.render("select");
-            }).catch(function (error) {
-                console.log(error);
-            });
+        form.on('select(filter1)', function() {
+            var name1 = $("#partName1 option:selected").text();
+            var name2 = $("#partName2 option:selected").text();
+            var name3 = $("#partName3 option:selected").text();
+
+            hidden('partName2', name1, name3);
+            hidden('partName3', name1, name2);
+            form.render("select");
         });
 
-        //2监听器
-        form.on('select(filter2)', function(data) {
-            $("#partName3").empty();
-            var partName3 = {"name": data.elem[data.elem.selectedIndex].text};
-            axios.post('/firstWeb/part/queryName', partName3).then(function(response) {
-                var role = document.getElementById("partName3");
-                var data = response.data;
-                for(var i = 0; i < data.length; i++) {
-                    var value = Object.keys(data);
-                    var label = Object.values(data);
-                    var option = document.createElement("option");  // 创建添加option属性
-                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
-                    option.innerText = label[i];    			    // 打印option对应的纯文本
-                    role.appendChild(option);  					    // 给select添加option子标签
+        //option不可选
+        function hidden(id, name1, name2) {
+            var obj = document.getElementById(id);
+            for(var i = 0; i < obj.options.length; i++) {
+                var option = obj.options[i];
+                var tmp = option.text;
+                if(tmp == name1 || tmp == name2) {
+                    option.setAttribute("disabled", "true");
+                } else {
+                    option.removeAttribute("disabled");
                 }
-                form.render("select");
-            }).catch(function (error) {
-                console.log(error);
-            });
+            }
+        }
+
+
+        //2监听器
+        form.on('select(filter2)', function() {
+            var name1 = $("#partName1 option:selected").text();
+            var name2 = $("#partName2 option:selected").text();
+            var name3 = $("#partName3 option:selected").text();
+            hidden('partName1', name2, name3);
+            hidden('partName3', name1, name2);
+            form.render("select");
+        });
+
+        //3监听器
+        form.on('select(filter3)', function() {
+            var name1 = $("#partName1 option:selected").text();
+            var name2 = $("#partName2 option:selected").text();
+            var name3 = $("#partName3 option:selected").text();
+            hidden('partName1', name2, name3);
+            hidden('partName2', name1, name3);
+            form.render("select");
         });
 
         var LineChart = function (ID, title, seriesData) {
