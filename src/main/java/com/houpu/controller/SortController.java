@@ -2,11 +2,9 @@ package com.houpu.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.StringUtil;
-import com.houpu.model.Employee;
 import com.houpu.model.Sort;
 import com.houpu.service.SortService;
-import org.apache.ibatis.annotations.Param;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +47,7 @@ public class SortController {
         int i = sortService.insertSort(sort);
         HashMap<String, Object> result = new HashMap<>();
         result.put("is", "0");
-        result.put("msg", "执行成功");
+        result.put("msg", "新增成功");
         return  result;
     }
 
@@ -74,5 +72,19 @@ public class SortController {
             result.put("count", pageInfo.getTotal());//分页总数
             return result;
     }
+    /**
+     * 删除一个部门(可恢复)
+     * @param
+     */
+    @RequestMapping(value = "/updateIs", method = RequestMethod.POST)
+    public Map<String, Object> updateIs(@RequestBody Sort sort) {
+        System.out.println(sort);
+        sortService.updateIs(sort);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", "1");
+        result.put("msg", "执行成功");
+        return result;
+    }
+
 
 }

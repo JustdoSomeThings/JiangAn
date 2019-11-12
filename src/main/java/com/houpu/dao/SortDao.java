@@ -25,6 +25,9 @@ public interface SortDao {
      */
     List<Sort> queryAllSortIs(@Param("is") Integer is);
 
-
+    /*
+    将类别下架
+    * */
+    void updateIs(Sort sort);
 
 }

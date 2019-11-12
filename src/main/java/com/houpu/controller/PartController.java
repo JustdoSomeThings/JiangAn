@@ -7,7 +7,7 @@ import com.houpu.model.Part;
 import com.houpu.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.Request;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +69,7 @@ public class PartController {
     public Map<String, Object> updateState(@RequestBody Part part) {
         partService.updateState(part);
         HashMap<String, Object> result = new HashMap<>();
-        result.put("status", "1");
+        result.put("status", "0");
         result.put("msg", "执行成功");
         return result;
     }
@@ -94,10 +94,10 @@ public class PartController {
      */
     @RequestMapping(value = "/savePart", method = RequestMethod.POST)
     public Map<String, Object> savePart(@RequestBody Part part) {
-        partService.savePart(part);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("status", "1");
-        result.put("msg", "执行成功");
-        return result;
-    }
+    partService.savePart(part);
+    HashMap<String, Object> result = new HashMap<>();
+    result.put("status", "1");
+    result.put("msg", "执行成功");
+    return result;
+}
 }

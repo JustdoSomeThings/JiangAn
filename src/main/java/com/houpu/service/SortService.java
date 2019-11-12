@@ -21,6 +21,9 @@ public interface SortService {
      * 查询下架的类别
      * @return
      */
-    List<Sort> queryAllSortIs( Integer is);
-
+    List<Sort> queryAllSortIs(Integer is);
+    /*
+    * 下架
+    * */
+    void updateIs(Sort sort);
 }

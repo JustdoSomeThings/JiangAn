@@ -12,19 +12,16 @@
 <body>
 <form class="layui-form" action="" lay-filter="departmentForm">
     <div class="layui-form-item" style="margin-top:30px">
-        <button type="button" id="add" class="layui-btn layui-btn-warm" lay-submit=""  >增加类别</button>
-        <button type="button" id="all" class="layui-btn layui-btn-warm" lay-submit=""  >所有类别</button>
-        <button type="button" id="update" class="layui-btn layui-btn-lg" lay-submit=""  >下架类别按钮</button>
+        <button type="button" id="add" class="layui-btn layui-btn-warm" lay-submit="">增加类别</button>
+        <button type="button" id="all" class="layui-btn layui-btn-warm" lay-submit="">所有类别</button>
+        <button type="button" id="update" class="layui-btn layui-btn-lg" lay-submit="">下架类别</button>
     </div>
 </form>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
-    <button type="button" class="layui-btn layui-btn-sm">
-        <i class="layui-icon">&#xe640;</i>下架
-    </button>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">下架</a>
 </script>
-
 
 <script src="../../layui/layui.js" charset="utf-8"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -32,78 +29,77 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
-    layui.use(['table','form','jquery','layer'], function(){
+    layui.use(['table', 'form', 'jquery', 'layer'], function () {
         var table = layui.table;
         var form = layui.form;
         var $ = layui.jquery;
         var layer = layui.layer;
 
         table.render({
-            id : 'departmentTable'
-            ,elem: '#test'
-            ,url:'/firstWeb/sort/queryAll'
-            ,title: '用户数据表'
-            ,where: {}
-            ,cols: [[
-                {field:'id', title:'编号'}
-                ,{field:'name', title:'类别名称'}
-                ,{field: 'remark', title:'类别备注'}
-                ,{field:'is', title:'类别状态'}
-                ,{field: 'right', title:'操作', toolbar: '#barDemo'}
+            id: 'departmentTable'
+            , elem: '#test'
+            , url: '/firstWeb/sort/queryAll'
+            , title: '用户数据表'
+           // , where: {}
+            , cols: [[
+                {field: 'id', title: '编号'}
+                , {field: 'name', title: '类别名称'}
+                , {field: 'remark', title: '类别备注'}
+                , {field: 'is', title: '类别状态'}
+                , {field: 'right', title: '操作', toolbar: '#barDemo'}
             ]]
-            ,page: true // 默认一页十条
-            ,limit:5
-            ,limits: [1,5,10,20]
+            , page: true // 默认一页十条
+            , limit: 5
+            , limits: [1, 5, 10, 20]
         });
+
         //刷新页面方法
-        function tableReload(){
-            table.reload('departmentTable',{
-                where : data
-                ,page: {
+        function tableReload() {
+            table.reload('departmentTable', {
+                where: data
+                , page: {
                     curr: 1
                 }
             })
         }
+    /*所有类别按钮功能*/
         $("#all").click(function () {
-            table.reload('departmentTable',{
-                url:"/firstWeb/sort/queryAll",
-                where : data
-                ,page: {
-                    curr: 1
-                }
+            table.reload('departmentTable', {
+                url: "/firstWeb/sort/queryAll",
             })
 
         })
-
-        $("#update").on('click',function () {
+        /*
+         下架类别按钮
+        */
+        $("#update").on('click', function () {
             tableReload1();
         })
-        function tableReload1(){
-            var is=0;
-            table.reload('departmentTable',{
+        function tableReload1() {
+            var is = 0;
+            table.reload('departmentTable', {
                 url: "/firstWeb/sort/queryAllIs",
-                where :{
-                    is:is,
+                where: {
+                    is: is,
                 }
-                ,page: {
+                , page: {
                     curr: 1
                 }
             })
         }
-
-
-
-        $("#add").click(function(){
-
+        /*
+        增加功能按钮
+        */
+        $("#add").click(function () {
             layer.open({
                 type: 2 //此处以iframe举例
-                ,title: '新增页面'
-                ,area: ['390px', '260px']
-                ,shade: 0
-                ,maxmin: true
-                ,content: 'add.html'
-                ,btn: ['提交', '关闭']
-                ,yes: function(index){
+                , title: '新增页面'
+                , area: ['390px', '260px']
+                , shade: 0
+                , maxmin: true
+                , content: 'add.html'
+                , btn: ['提交', '关闭']
+                , yes: function (index) {
                     var data = window['layui-layer-iframe' + index].getValue();
                     if (!data.name) {
                         layer.msg("类别名称不能为空");
@@ -127,33 +123,42 @@
                     });
                     layer.close(index);
                 }
-                ,btn2: function(index){//5
+                , btn2: function (index) {//5
                     layer.close(index);
                 }
             });
         })
+    /*
+    * 下架类别
+    *
+    *
+    * */
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
-            //console.log(obj)
-            if(obj.event === 'del'){
+            console.log(obj);
+            if(obj.event === 'del'){//删除
                 layer.confirm('真的删除行么', function(index){
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if(obj.event === 'edit'){
-                layer.prompt({
-                    formType: 2
-                    ,value: data.email
-                }, function(value, index){
-                    obj.update({
-                        email: value
+                    axios.post('/firstWeb/sort/updateIs', data).then(function (response) {
+                        //post请求执行成功的回调
+                        if (response.data.status == "1") {
+                            layer.close(index);
+                            //刷新表格
+                            tableReload();
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg(response.data.msg)
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
                     });
+                    obj.del();
                     layer.close(index);
                 });
             }
         });
+
     });
 </script>
 

@@ -143,7 +143,7 @@
         $("#add").click(function() {
             layer.open({
                 type: 2 //此处以iframe举例
-                ,title: '新增页面'
+                ,title: '新增客户'
                 ,area: ['390px', '260px']
                 ,shade: 0
                 ,maxmin: true
@@ -156,7 +156,7 @@
                         return false;
                     }
                     //发送新增请求 get/post √
-                    axios.post('/firstWeb/part/savePart', data).then(function (response) {
+                    axios.post('/firstWeb/client/saveClient', data).then(function (response) {
                         //post请求执行成功的回调
                         if (response.data.status == "1") {
                             layer.close(index);

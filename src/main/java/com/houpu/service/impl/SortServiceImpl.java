@@ -31,4 +31,9 @@ public class SortServiceImpl implements SortService{
     public List<Sort> queryAllSortIs( Integer is) {
         return sortDao.queryAllSortIs(is);
     }
+
+    @Override
+    public void updateIs(Sort sort) {
+         sortDao.updateIs(sort);
+    }
 }

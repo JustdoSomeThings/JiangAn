@@ -9,12 +9,17 @@
         <result property="remark" column="s_remark"/>
         <result property="is" column="s_is"/>
     </resultMap>
+<!--将类别下架-->
+    <update id="updateIs" parameterType="java.lang.Integer">
+        update t_sort set s_is=0 where s_id=#{id}
+    </update>
+
 
     <!-- 查询类别 -->
     <select id="queryAllSort" resultMap="sort">
-            select * from t_sort
+            select * from t_sort where s_is=1
     </select>
-<!--    下架类别-->
+<!--    查询所有下架类别-->
     <select id="queryAllSortIs" resultMap="sort" parameterType="int">
         select * from t_sort where s_is=#{is}
 

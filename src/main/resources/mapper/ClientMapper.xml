@@ -35,6 +35,10 @@
         select * from t_client
     </select>
 
+    <insert id="saveClient" parameterType="client">
+        insert into t_client(name,tel,address,c_is) values(#{name},#{tel},#{address},1)
+    </insert>
+
 
 
 
