@@ -72,12 +72,8 @@ public class ClientController {
      * @param client
      */
     @RequestMapping(value = "/saveClient", method = RequestMethod.POST)
-    public Map<String, Object> savePart(@RequestBody Client client) {
+    public void saveClient(Client client) {
         clientService.saveClient(client);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("status", "1");
-        result.put("msg", "执行成功");
-        return result;
     }
 
 
