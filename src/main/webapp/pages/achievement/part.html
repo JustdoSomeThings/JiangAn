@@ -32,7 +32,7 @@
                     </select>
                 </div>
             </div>
-            <button type="button" id="queryOrder" class="layui-inline layui-btn" lay-event="query">查询</button>
+            <button type="button" id="queryOrder" class="layui-inline layui-btn" lay-filter="query">查询</button>
         </div>
     </form>
     <div id="main" class="layui-card-body" style="margin:0 auto; width: 500px; height: 500px;">
@@ -43,13 +43,13 @@
 <script>
     layui.use(['form'], function() {
         var form = layui.form;
-        var data;
+        var seriesData = [];
         $(document).ready(function () {
             axios.post('/firstWeb/part/queryName').then(function(response) {
                 var role1 = document.getElementById("partName1");
                 var role2 = document.getElementById("partName2");
                 var role3 = document.getElementById("partName3");
-                data = response.data;
+                var data = response.data;
                 for (var i = 0; i < data.length + 1; i++) {
                     var value = Object.keys(data);
                     var label = Object.values(data);
@@ -80,8 +80,6 @@
                 console.log(error);
             });
 
-
-            var seriesData = [];
             axios.post('/firstWeb/order/queryAchievement').then(function(response) {
                 seriesData = response.data;
                 LineChart('main', '部门业绩统计图', seriesData);
@@ -90,7 +88,9 @@
             });
         });
 
-        //1监听器
+
+
+        //监听器1
         form.on('select(filter1)', function() {
             var name1 = $("#partName1 option:selected").text();
             var name2 = $("#partName2 option:selected").text();
@@ -101,7 +101,40 @@
             form.render("select");
         });
 
-        //option不可选
+        //监听器2
+        form.on('select(filter2)', function() {
+            var name1 = $("#partName1 option:selected").text();
+            var name2 = $("#partName2 option:selected").text();
+            var name3 = $("#partName3 option:selected").text();
+            hidden('partName1', name2, name3);
+            hidden('partName3', name1, name2);
+            form.render("select");
+        });
+
+        //监听器3
+        form.on('select(filter3)', function() {
+            var name1 = $("#partName1 option:selected").text();
+            var name2 = $("#partName2 option:selected").text();
+            var name3 = $("#partName3 option:selected").text();
+            hidden('partName1', name2, name3);
+            hidden('partName2', name1, name3);
+            form.render("select");
+        });
+
+        $('#queryOrder').click(function() {
+            var name1 = $("#partName1 option:selected").text();
+            var name2 = $("#partName2 option:selected").text();
+            var name3 = $("#partName3 option:selected").text();
+            var newData = [];
+            for(var i = 0; i < seriesData.length; i++) {
+                if(seriesData[i].name == name1 || seriesData[i].name == name2 || seriesData[i].name == name3) {
+                    newData.push(seriesData[i]);
+                }
+            }
+            LineChart('main', '部门业绩统计图', newData);
+        });
+
+        //使option不可选
         function hidden(id, name1, name2) {
             var obj = document.getElementById(id);
             for(var i = 0; i < obj.options.length; i++) {
@@ -115,27 +148,7 @@
             }
         }
 
-
-        //2监听器
-        form.on('select(filter2)', function() {
-            var name1 = $("#partName1 option:selected").text();
-            var name2 = $("#partName2 option:selected").text();
-            var name3 = $("#partName3 option:selected").text();
-            hidden('partName1', name2, name3);
-            hidden('partName3', name1, name2);
-            form.render("select");
-        });
-
-        //3监听器
-        form.on('select(filter3)', function() {
-            var name1 = $("#partName1 option:selected").text();
-            var name2 = $("#partName2 option:selected").text();
-            var name3 = $("#partName3 option:selected").text();
-            hidden('partName1', name2, name3);
-            hidden('partName2', name1, name3);
-            form.render("select");
-        });
-
+        //生成饼图
         var LineChart = function (ID, title, seriesData) {
             var myChart = echarts.init(document.getElementById(ID));
             var option = {

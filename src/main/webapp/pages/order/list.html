@@ -97,7 +97,7 @@
 
         //页面加载时向下拉选框中加载数据
         $(document).ready(function() {
-            axios.post('/firstWeb/part/queryName').then(function (response) {
+            axios.post('/firstWeb/part/queryName').then(function(response) {
                 var role = document.getElementById("partName");
                 var data = response.data;
                 for(var i = 0; i < data.length; i++) {

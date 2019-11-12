@@ -66,4 +66,5 @@
         GROUP BY
             p_name
     </select>
+
 </mapper>
