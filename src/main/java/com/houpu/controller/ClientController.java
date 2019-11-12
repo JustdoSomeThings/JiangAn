@@ -51,30 +51,48 @@ public class ClientController {
 
     /**
      * 删除一个客户(可恢复)
-     * @param partId
+     * @param client
      */
     @RequestMapping(value = "/updateState", method = RequestMethod.POST)
-    public void updateState(Integer partId) {
-        clientService.updateState(partId);
+    public Map<String,Object> updateState(@RequestBody Client client){
+    clientService.updateState(client);
+    HashMap<String,Object> result = new HashMap<>();
+    result.put("status",1);
+    result.put("msg","执行成功");
+    return result;
     }
+
 
     /**
      * 更新一个客户
      * @param client
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public void update(Client client) {
-        clientService.update(client);
+    public Map<String,Object> update(@RequestBody Client client){
+    clientService.update(client);
+    HashMap<String,Object> result = new HashMap<>();
+    result.put("status",1);
+    result.put("msg","执行成功");
+    return result;
     }
+
 
     /**
      * 新增一个客户
      * @param client
      */
     @RequestMapping(value = "/saveClient", method = RequestMethod.POST)
-    public void saveClient(Client client) {
-        clientService.saveClient(client);
+    public Map<String,Object> saveClient(@RequestBody Client client){
+    clientService.saveClient(client);
+    HashMap<String,Object> result = new HashMap<>();
+    result.put("status","1");
+    result.put("msg","执行成功");
+    return result;
     }
+
+
+
+
 
 
     @GetMapping("/queryAllIs")

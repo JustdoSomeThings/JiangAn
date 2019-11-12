@@ -11,6 +11,18 @@
         <result property="address" column="c_address"></result>
         <result property="is" column="c_is"></result>
     </resultMap>
+    <!--    添加员工-->
+    <insert id="saveClient" parameterType="client">
+        insert into t_client(c_name,c_tel,c_address,c_is) values(#{name},#{tel},#{address},1)
+    </insert>
+    <!--    更新员工信息-->
+    <update id="update" parameterType="client">
+        update t_client set c_name=#{name},c_tel=#{tel},c_address=#{address} where c_id=#{id}
+    </update>
+    <!--    删除员工信息: 假删除-->
+    <update id="updateState" parameterType="java.lang.Integer">
+        update t_client set c_is = 0 where c_id =#{id}
+    </update>
     <!-- 删除员工-->
     <select id="queryAllClientIs" resultMap="clientResultMap" parameterType="int">
         select * from t_client where c_is=#{is}
@@ -34,6 +46,8 @@
     <select id="queryAll" resultMap="clientResultMap" >
         select * from t_client
     </select>
+
+
 
 
 

@@ -32,18 +32,12 @@
     </div>
 
 </form>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
-<script type="text/html" id="toolbarDemo">
-    <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
-    </div>
-</script>
-
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="query" href="list.html">查询</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update">修改</a>
 </script>
 
 
@@ -53,24 +47,25 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
-
-
     layui.use(['table', 'form', 'jquery', 'layer'], function () {
         var table = layui.table;
         var form = layui.form;
         var $ = layui.jquery;
         var layer = layui.layer;
+
         table.render({
-            id: 'partTable'
+            id: 'clientTable'
             , elem: '#test'
-            , url: '/firstWeb/part/queryLike'
+            , url: '/firstWeb/client/queryAll'
             , title: '用户数据表'
             , where: {}
             , cols: [[
-                {field: 'id', title: '部门编号'}
-                , {field: 'name', title: '部门名称'}
-                , {field: 'remark', title: '部门备注'}
-                , {fixed: 'right', title: '查询操作', toolbar: '#barDemo'}
+                {field: 'id', title: '编号'}
+                , {field: 'name', title: '姓名'}
+                , {field: 'tel', title: '电话'}
+                , {field: 'address', title: '地址'}
+                , {field: 'is', title: '备注'}
+                , {field: 'right', title: '操作', toolbar: '#barDemo'}
             ]]
             , page: true // 默认一页十条
             , limit: 5
@@ -79,17 +74,43 @@
 
         function tableReload() {
             var data = form.val('partForm');
-            table.reload('partTable', {
-                where: data
+            table.reload('clientTable',{
+                where : data
+                ,page: {
+                    curr: 1
+                }
+            })
+        }
+        $("#formSubmit").click(function(){
+            tableReload();
+        });
+
+        // $("#formsubmit").click(function () {
+        //     table.reload('clientTable', {
+        //         where: data
+        //         , page: {
+        //             curr: 1
+        //         }
+        //     })
+        // });
+
+
+        $("#del").on('click', function () {
+            tableReload1();
+        })
+
+        function tableReload1() {
+            var is = 0;
+            table.reload('clientTable', {
+                url: "/firstWeb/client/queryAllIs",
+                where: {
+                    is: is,
+                }
                 , page: {
                     curr: 1
                 }
             })
         }
-
-        $("#formSubmit").click(function () {
-            tableReload();
-        });
 
 
         //页面加载时向下拉选框中加载数据
@@ -132,23 +153,23 @@
             });
         });
 
-        $("#add").click(function () {
+        $("#add").click(function() {
             layer.open({
                 type: 2 //此处以iframe举例
-                , title: '新增页面'
-                , area: ['390px', '260px']
-                , shade: 0
-                , maxmin: true
-                , content: 'dialog.html'
-                , btn: ['提交', '关闭']
-                , yes: function (index) {
+                ,title: '新增客户'
+                ,area: ['390px', '260px']
+                ,shade: 0
+                ,maxmin: true
+                ,content: 'addlist.html'
+                ,btn: ['提交', '关闭']
+                ,yes: function(index) {
                     var data = window['layui-layer-iframe' + index].getValue();
                     if (!data.name) {
                         layer.msg("部门名称不能为空");
                         return false;
                     }
                     //发送新增请求 get/post √
-                    axios.post('/firstWeb/part/savePart', data).then(function (response) {
+                    axios.post('/firstWeb/client/saveClient', data).then(function (response) {
                         //post请求执行成功的回调
                         if (response.data.status == "1") {
                             layer.close(index);
@@ -162,39 +183,19 @@
                         console.log(error);
                     });
                 }
-                , no: function (index) {//5
+                ,no: function(index){//5
                     layer.close(index);
                 }
             });
         })
 
-
-        $("#del").on('click', function () {
-            tableReload1();
-        })
-
-        function tableReload1() {
-            var is = 0;
-            table.reload('partTable', {
-                url: "/firstWeb/client/queryAllIs",
-
-                where: {
-                    is: is,
-                }
-                , page: {
-                    curr: 1
-                }
-            })
-        }
-
-
-        //监听行工具事件
-        table.on('tool(test)', function (obj) {
+//监听行工具事件
+        table.on('tool(test)', function(obj){
             var data = obj.data;
             console.log(obj);
-            if (obj.event === 'query') {//删除
-                layer.confirm('真的删除行么', function (index) {
-                    axios.post('/firstWeb/part/updateState', data).then(function (response) {
+            if(obj.event === 'del'){//删除
+                layer.confirm('真的删除行么', function(index){
+                    axios.post('/firstWeb/client/updateState', data).then(function (response) {
                         //post请求执行成功的回调
                         if (response.data.status == "1") {
                             layer.close(index);
@@ -209,6 +210,41 @@
                     });
                     obj.del();
                     layer.close(index);
+                });
+            } else if(obj.event === 'update') {//编辑
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '修改页面'
+                    ,area: ['390px', '260px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,content: 'addlist.html'
+                    ,btn: ['提交', '关闭']
+                    ,yes: function(index){
+                        var data = window['layui-layer-iframe' + index].getValue();
+                        data.id = obj.data.id;
+                        if (!data.name) {
+                            layer.msg("部门名称不能为空");
+                            return false;
+                        }
+                        //发送新增请求 get/post √
+                        axios.post('/firstWeb/client/update', data).then(function(response) {
+                            //post请求执行成功的回调
+                            if (response.data.status == "1") {
+                                layer.close(index);
+                                //刷新表格
+                                tableReload();
+                                layer.msg("更新成功");
+                            } else {
+                                layer.msg(response.data.msg)
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                    ,no: function(index){//5
+                        layer.close(index);
+                    }
                 });
             }
         });
