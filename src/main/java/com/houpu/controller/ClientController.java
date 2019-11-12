@@ -40,6 +40,20 @@ public class ClientController {
     }
 
     /**
+     * 删除一个客户(可恢复)
+     * @param client
+     */
+    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
+        public  Map<String, Object> updateState(@RequestBody Client client) {
+        clientService.updateState(client);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", "1");
+        result.put("msg", "执行成功");
+        return result;
+    }
+
+
+    /**
      * 根据员工查询所有客户姓名
      * @return
      */
@@ -49,33 +63,42 @@ public class ClientController {
         return trueNameList;
     }
 
-    /**
-     * 删除一个客户(可恢复)
-     * @param partId
-     */
-    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
-    public void updateState(Integer partId) {
-        clientService.updateState(partId);
-    }
+//    /**
+//     * 删除一个客户(可恢复)
+//     * @param partId
+//     */
+//    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
+//    public void updateState(Integer partId) {
+//        clientService.updateState(partId);
+//    }
 
     /**
      * 更新一个客户
      * @param client
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public void update(Client client) {
+    public Map<String, Object> update(@RequestBody Client client) {
         clientService.update(client);
+        System.out.println(client);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", "1");
+        result.put("msg", "执行成功");
+        return result;
     }
+
 
     /**
      * 新增一个客户
      * @param client
      */
     @RequestMapping(value = "/saveClient", method = RequestMethod.POST)
-    public void saveClient(Client client) {
+    public Map<String, Object> saveClient(@RequestBody Client client) {
         clientService.saveClient(client);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("status", "1");
+        result.put("msg", "执行成功");
+        return result;
     }
-
 
     @GetMapping("/queryAllIs")
     public Map<String, Object> queryAllIs(int page, int limit, @RequestParam Integer is) {

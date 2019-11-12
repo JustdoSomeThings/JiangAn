@@ -156,7 +156,7 @@
                         return false;
                     }
                     //发送新增请求 get/post √
-                    axios.post('/firstWeb/part/savePart', data).then(function (response) {
+                    axios.post('/firstWeb/client/saveClient', data).then(function (response) {
                         //post请求执行成功的回调
                         if (response.data.status == "1") {
                             layer.close(index);
@@ -176,15 +176,62 @@
             });
         })
 
-
-        //监听行工具事件
-        table.on('tool(test)', function (obj) {
+//监听行工具事件
+        table.on('tool(test)', function(obj){
             var data = obj.data;
-            //console.log(obj)
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
+            console.log(obj);
+            if(obj.event === 'del'){//删除
+                layer.confirm('真的删除行么', function(index){
+                    axios.post('/firstWeb/client/updateState', data).then(function (response) {
+                        //post请求执行成功的回调
+                        if (response.data.status == "1") {
+                            layer.close(index);
+                            //刷新表格
+                            tableReload();
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg(response.data.msg)
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
                     obj.del();
                     layer.close(index);
+                });
+            } else if(obj.event === 'back') {//编辑
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '修改页面'
+                    ,area: ['390px', '260px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,content: 'addclient.html'
+                    ,btn: ['提交', '关闭']
+                    ,yes: function(index){
+                        var data = window['layui-layer-iframe' + index].getValue();
+                        data.id = obj.data.id;
+                        if (!data.name) {
+                            layer.msg("部门名称不能为空");
+                            return false;
+                        }
+                        //发送新增请求 get/post √
+                        axios.post('/firstWeb/client/update', data).then(function(response) {
+                            //post请求执行成功的回调
+                            if (response.data.status == "1") {
+                                layer.close(index);
+                                //刷新表格
+                                tableReload();
+                                layer.msg("更新成功");
+                            } else {
+                                layer.msg(response.data.msg)
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                    ,no: function(index){//5
+                        layer.close(index);
+                    }
                 });
             }
         });
