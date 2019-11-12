@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="partForm">
+    <div class="layui-form-item" style="margin-top:10px">
+        <div class="layui-inline">
+            <label class="layui-form-label">部门名称：</label>
+            <div class="layui-input-block">
+                <select class="layui-form-select" id="partName" lay-filter="partFilter">
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">员工姓名：</label>
+            <div class="layui-input-block">
+                <select class="layui-form-select" id="employeeTrueName" lay-filter="employeeFilter">
+                </select>
+            </div>
+        </div>
+        <button type="button" id="formSubmit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="query">查询</button>
+        <button type="button" id="add" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="add">新增客户</button>
+        <button type="button" id="del" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="del">已删除客户</button>
+    </div>
+
+</form>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="back">恢复</a>
+</script>
+
+
+<script src="../../layui/layui.js" charset="utf-8"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use(['table', 'form', 'jquery', 'layer'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        table.render({
+            id: 'clientTable'
+            , elem: '#test'
+            , url: '/firstWeb/client/queryAll'
+            , title: '用户数据表'
+            , where: {}
+            , cols: [[
+                {field: 'id', title: '编号'}
+                , {field: 'name', title: '姓名'}
+                , {field: 'tel', title: '电话'}
+                , {field: 'address', title: '地址'}
+                , {field: 'is', title: '备注'}
+                , {field: 'right', title: '操作', toolbar: '#barDemo'}
+            ]]
+            , page: true // 默认一页十条
+            , limit: 5
+            , limits: [1, 5, 10, 20]
+        });
+
+        $("#formsubmit").click(function () {
+            table.reload('clientTable', {
+                where: data
+                , page: {
+                    curr: 1
+                }
+            })
+        });
+
+
+        $("#del").on('click', function () {
+            tableReload1();
+        })
+
+        function tableReload1() {
+            var is = 0;
+            table.reload('clientTable', {
+                url: "/firstWeb/client/queryAllIs",
+                where: {
+                    is: is,
+                }
+                , page: {
+                    curr: 1
+                }
+            })
+        }
+
+
+        //页面加载时向下拉选框中加载数据
+        $(document).ready(function () {
+            axios.post('/firstWeb/part/queryName').then(function (response) {
+                var role = document.getElementById("partName");
+                var data = response.data;
+                for (var i = 0; i < data.length; i++) {
+                    var value = Object.keys(data);
+                    var label = Object.values(data);
+                    var option = document.createElement("option");  // 创建添加option属性
+                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
+                    option.innerText = label[i];    			    // 打印option对应的纯文本
+                    role.appendChild(option);  					    // 给select添加option子标签
+                }
+                form.render("select");
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+
+        //部门名称select监听器
+        form.on('select(partFilter)', function (data) {
+            $("#employeeTrueName").empty();
+            var partName = {"name": data.elem[data.elem.selectedIndex].text};
+            axios.post('/firstWeb/employee/queryTrueName', partName).then(function (response) {
+                var role = document.getElementById("employeeTrueName");
+                var data = response.data;
+                for (var i = 0; i < data.length; i++) {
+                    var value = Object.keys(data);
+                    var label = Object.values(data);
+                    var option = document.createElement("option");  // 创建添加option属性
+                    option.setAttribute("value", value[i]); 	    // 给option的value添加值
+                    option.innerText = label[i];    			    // 打印option对应的纯文本
+                    role.appendChild(option);  					    // 给select添加option子标签
+                }
+                form.render("select");
+            }).catch(function (error) {
+                console.log(error);
+            });
+        });
+
+        $("#add").click(function() {
+            layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '新增客户'
+                ,area: ['390px', '260px']
+                ,shade: 0
+                ,maxmin: true
+                ,content: 'addclient.html'
+                ,btn: ['提交', '关闭']
+                ,yes: function(index) {
+                    var data = window['layui-layer-iframe' + index].getValue();
+                    if (!data.name) {
+                        layer.msg("部门名称不能为空");
+                        return false;
+                    }
+                    //发送新增请求 get/post √
+                    axios.post('/firstWeb/client/saveClient', data).then(function (response) {
+                        //post请求执行成功的回调
+                        if (response.data.status == "1") {
+                            layer.close(index);
+                            //刷新表格
+                            tableReload();
+                            layer.msg("新增成功");
+                        } else {
+                            layer.msg(response.data.msg)
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+                ,no: function(index){//5
+                    layer.close(index);
+                }
+            });
+        })
+
+//监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            console.log(obj);
+            if(obj.event === 'del'){//删除
+                layer.confirm('真的删除行么', function(index){
+                    axios.post('/firstWeb/client/updateState', data).then(function (response) {
+                        //post请求执行成功的回调
+                        if (response.data.status == "1") {
+                            layer.close(index);
+                            //刷新表格
+                            tableReload();
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg(response.data.msg)
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'back') {//编辑
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '修改页面'
+                    ,area: ['390px', '260px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,content: 'addclient.html'
+                    ,btn: ['提交', '关闭']
+                    ,yes: function(index){
+                        var data = window['layui-layer-iframe' + index].getValue();
+                        data.id = obj.data.id;
+                        if (!data.name) {
+                            layer.msg("部门名称不能为空");
+                            return false;
+                        }
+                        //发送新增请求 get/post √
+                        axios.post('/firstWeb/client/update', data).then(function(response) {
+                            //post请求执行成功的回调
+                            if (response.data.status == "1") {
+                                layer.close(index);
+                                //刷新表格
+                                tableReload();
+                                layer.msg("更新成功");
+                            } else {
+                                layer.msg(response.data.msg)
+                            }
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                    ,no: function(index){//5
+                        layer.close(index);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

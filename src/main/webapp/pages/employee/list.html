@@ -38,15 +38,17 @@
             ,where: {}
             ,cols: [[
                 {field:'id', title:'员工编号'}
-                ,{field:'partId', title:'部门编号(外键)'}
+                ,{field:'part', title:'所在部门' ,templet:function (data) {
+                    return data.part.name
+                    }}
                 ,{field:'loginName', title:'登陆名'}
-               ,{field: 'password', title:'登陆密码'}
+                ,{field: 'password', title:'登陆密码'}
                 ,{field:'img', title:'员工图片'}
                 ,{field:'gender', title:'员工性别'}
                 ,{field: 'flag', title:'员工级别'}
                 ,{field:'admin', title:'员工操作系统级别'}
-                ,{field:'remark', title:'员工备注'}
                 ,{field: 'trueName', title:'员工真实姓名'}
+                ,{field:'remark', title:'员工备注'}
                 ,{field: 'is', title:'员工状态'}
                 ,{field: 'right', title:'操作', toolbar: '#barDemo'}
             ]]

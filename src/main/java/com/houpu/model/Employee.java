@@ -20,6 +20,18 @@ public class Employee {
     private String trueName;
     private Integer is;
 
+    private Part part;
+
+
+
+    public Part getPart() {
+        return part;
+    }
+
+    public void setPart(Part part) {
+        this.part = part;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +

@@ -23,9 +23,9 @@ public interface ClientService {
 
     /**
      * 删除一个客户(更新客户状态, 可恢复)
-     * @param id
+     * @param client
      */
-    void updateState(Integer id);
+    void updateState(Client client);
 
     /**
      * 更新一个客户信息
@@ -38,4 +38,10 @@ public interface ClientService {
      * @param client
      */
     void saveClient(Client client);
+
+    /**
+     * 查询删除的客户
+     * @return
+     */
+    List<Client> queryAllClientIs(Integer is);
 }

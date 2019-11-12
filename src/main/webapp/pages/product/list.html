@@ -10,6 +10,35 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
+<form class="layui-form" action="" lay-filter="orderForm" >
+    <div class="layui-form-item" style="margin-top:10px">
+        <div class="layui-inline">
+            <label class="layui-form-label">产品类别：</label>
+            <div class="layui-input-block">
+                <select class="layui-form-select" name="city" lay-verify="required">
+                    <option value="0">食物类</option>
+                    <option value="1">日用类</option>
+                    <option value="2">水果类</option>
+                    <option value="3">饮料类</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">商品名称:</label>
+            <div class="layui-input-block">
+                <select class="layui-form-select" name="city" lay-verify="required">
+                    <option value="">大米</option>
+                    <option value="0">香蕉</option>
+                    <option value="1">苹果</option>
+                    <option value="2">洗面奶</option>
+                    <option value="3">可乐</option>
+                    <option value="4">小麦</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" id="formSubmit" class="layui-inline layui-btn" lay-submit="" lay-filter="query">查询</button>
+    </div>
+</form>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script src="../../layui/layui.js" charset="utf-8"></script>
@@ -34,9 +63,10 @@
                 {field:'id', title:'编号'}
                 ,{field:'name', title:'商品名称'}
                 ,{field: 'area', title:'产地'}
-                ,{field:'sort', title:'类别名'}
+                ,{field:'sort', title:'类别名',templet:function (data){
+                        return data.sort.name;
+                    }}
                 ,{field:'ml', title:'规格'}
-
 
             ]]
             ,page: true // 默认一页十条

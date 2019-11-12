@@ -3,6 +3,7 @@ package com.houpu.dao;
 
 import com.houpu.model.Client;
 import com.houpu.model.Employee;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,9 +24,9 @@ public interface ClientDao {
 
     /**
      * 删除一个客户(更新客户状态, 可恢复)
-     * @param id
+     * @param client
      */
-    void updateState(Integer id);
+    void updateState(Client client);
 
     /**
      * 更新一个客户信息
@@ -38,4 +39,10 @@ public interface ClientDao {
      * @param client
      */
     void saveClient(Client client);
+
+    /**
+     * 查询删除的客户
+     * @return
+     */
+    List<Client> queryAllClientIs(@Param("is") Integer is);
 }

@@ -3,6 +3,7 @@ package com.houpu.service;
 import com.houpu.model.Sort;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SortService {
     /**
@@ -16,4 +17,13 @@ public interface SortService {
      * @return
      */
     int insertSort(Sort sort);
+    /**
+     * 查询下架的类别
+     * @return
+     */
+    List<Sort> queryAllSortIs(Integer is);
+    /*
+    * 下架
+    * */
+    void updateIs(Sort sort);
 }

@@ -11,7 +11,7 @@
     </resultMap>
 
     <!-- 查询所有存在部门名称 -->
-    <select id="queryName" parameterType="java.lang.Integer" resultType="java.lang.String">
+    <select id="queryName" resultType="java.lang.String">
         select p_name from t_part where p_is = 1
     </select>
 

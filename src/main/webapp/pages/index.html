@@ -50,7 +50,7 @@
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:load_employee();">员工管理</a></dd>
                         <dd><a href="javascript:;">恢复员工</a></dd>
-                        <dd><a href="javascript:;">查询员工</a></dd>
+                        <dd><a href="javascript:load_semployee();">查询员工</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -122,6 +122,10 @@
     function load_employee() {
         document.getElementById("main").innerHTML =
             '<object type="text/html" data="employee/list.html" width="100%" height="600px"></object>';
+    }
+    function load_semployee() {
+        document.getElementById("main").innerHTML =
+            '<object type="text/html" data="employee/list3.html" width="100%" height="600px"></object>';
     }
 
     //类别

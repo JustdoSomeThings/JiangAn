@@ -21,7 +21,6 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
-
     /**
      * 查询所有状态为存在的员工
      * @param page
@@ -33,9 +32,9 @@ public class EmployeeController {
         //从第page页开始 每页查询limit数据
         PageHelper.startPage(page, limit);
         //调用实现类的方法执行业务
-        List<Employee> clientList = employeeService.queryAllEmployee();
+        List<Employee> list = employeeService.queryAllEmployee();
         //创建一个存储页面信息的对象
-        PageInfo<Employee> pageInfo = new PageInfo<>(clientList, limit);
+        PageInfo<Employee> pageInfo = new PageInfo<>(list, limit);
         //创建hasMap将MySQL数据给页面
         HashMap<String, Object> result = new HashMap<>();
         result.put("code", 0);
