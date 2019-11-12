@@ -1,11 +1,9 @@
 package com.houpu.dao;
 
-import com.houpu.model.Employee;
 import com.houpu.model.Sort;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SortDao {
     /**

@@ -19,7 +19,8 @@
     <select id="queryAllSort" resultMap="sort">
             select * from t_sort where s_is=1
     </select>
-<!--    查询所有下架类别-->
+
+    <!-- 下架类别 -->
     <select id="queryAllSortIs" resultMap="sort" parameterType="int">
         select * from t_sort where s_is=#{is}
 
