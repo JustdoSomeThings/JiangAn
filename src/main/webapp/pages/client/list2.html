@@ -26,9 +26,9 @@
                 </select>
             </div>
         </div>
-        <button type="button" id="formSubmit" class="layui-btn" lay-submit="" lay-filter="query">查询</button>
-        <button type="button" id="add" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="add">新增客户</button>
-        <button type="button" id="del" class="layui-btn layui-btn-warm" lay-submit="" lay-filter="del">已删除客户</button>
+        <button type="button" id="formSubmit" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="query">查询</button>
+        <button type="button" id="add" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="add">新增客户</button>
+        <button type="button" id="del" class="layui-btn layui-btn-normal" lay-submit="" lay-filter="del">已删除客户</button>
     </div>
 
 </form>
@@ -36,8 +36,8 @@
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="back">恢复</a>
 </script>
 
 
@@ -90,7 +90,6 @@
             var is = 0;
             table.reload('clientTable', {
                 url: "/firstWeb/client/queryAllIs",
-
                 where: {
                     is: is,
                 }
@@ -141,6 +140,42 @@
             });
         });
 
+        $("#add").click(function() {
+            layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '新增页面'
+                ,area: ['390px', '260px']
+                ,shade: 0
+                ,maxmin: true
+                ,content: 'addclient.html'
+                ,btn: ['提交', '关闭']
+                ,yes: function(index) {
+                    var data = window['layui-layer-iframe' + index].getValue();
+                    if (!data.name) {
+                        layer.msg("部门名称不能为空");
+                        return false;
+                    }
+                    //发送新增请求 get/post √
+                    axios.post('/firstWeb/part/savePart', data).then(function (response) {
+                        //post请求执行成功的回调
+                        if (response.data.status == "1") {
+                            layer.close(index);
+                            //刷新表格
+                            tableReload();
+                            layer.msg("新增成功");
+                        } else {
+                            layer.msg(response.data.msg)
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+                ,no: function(index){//5
+                    layer.close(index);
+                }
+            });
+        })
+
 
         //监听行工具事件
         table.on('tool(test)', function (obj) {
@@ -149,16 +184,6 @@
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     obj.del();
-                    layer.close(index);
-                });
-            } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
                     layer.close(index);
                 });
             }
