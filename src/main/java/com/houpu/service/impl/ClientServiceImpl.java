@@ -26,8 +26,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void updateState(Client client) {
-        clientDao.updateState(client);
+    public void updateState(Integer id) {
+        clientDao.updateState(id);
     }
 
     @Override

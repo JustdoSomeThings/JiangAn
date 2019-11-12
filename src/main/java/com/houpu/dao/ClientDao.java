@@ -24,9 +24,9 @@ public interface ClientDao {
 
     /**
      * 删除一个客户(更新客户状态, 可恢复)
-     * @param client
+     * @param id
      */
-    void updateState(Client client);
+    void updateState(Integer id);
 
     /**
      * 更新一个客户信息
