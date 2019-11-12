@@ -11,17 +11,8 @@
     </resultMap>
 
     <!-- 查询所有存在部门名称 -->
-    <select id="queryName" parameterType="map" resultType="java.lang.String">
+    <select id="queryName" resultType="java.lang.String">
         select p_name from t_part where p_is = 1
-            <if test="name1 != null">
-                AND p_name != #{name1}
-            </if>
-            <if test="name2 != null">
-                AND p_name != #{name2}
-            </if>
-            <if test="name3 != null">
-                AND p_name != #{name3}
-            </if>
     </select>
 
 
